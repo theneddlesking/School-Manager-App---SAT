@@ -1,0 +1,243 @@
+.main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    height: 100vh;
+}
+
+body {
+      background-color: #E7ECF3;
+}
+
+.container {
+    //border: 3px solid red;
+    padding: 10px;
+}
+
+.flex-container {
+    display: flex;
+}
+
+.main-container {
+    grid-row: 1 / span 1;
+    grid-column: 1 / span 2;
+}
+
+.sticky-note-container {
+    grid-row: 2 / span 2;
+    grid-column: 1 / span 2;
+    justify-content: space-between;
+    padding-top: 50px;
+}
+
+.main-column {
+    grid-row: 1 / span 4;
+    grid-column: 3 / span 4;
+}
+
+.sticky-note {
+    width: 40%;
+}
+
+.schedule-container {
+    width: 75%;
+}
+
+.settings-container {
+    width: 25%;
+}
+
+.subject {
+      background-color: #C6D8EF;
+      width: 50%;
+      padding: 10px;
+      margin: 10px;
+
+}
+
+.exercise-box p {
+      display: inline;
+      margin: 0px;
+      padding: 0px;
+}
+
+.exercise-box {
+      display: inline;
+      width: 50px;
+      height: 50px;
+      border: 2px solid black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+}
+
+.exercise-box:hover {
+      background-color: #E7ECF3;
+      transition: 0.2s;
+}
+
+.subject:not(.highlighted-subject):hover  {
+      background-color: #A2BFF9;
+      transition: 0.2s;
+}
+
+.highlighted-subject:hover {
+      background-color: #234689;
+      transition: 0.2s;
+}
+
+
+.subject-name {
+      margin: 0px;
+      margin-left: 20px;
+      color: white;
+      cursor: pointer;
+}
+
+.highlighted-subject {
+      background-color: #3C64B1;
+      margin-left: 50px;
+}
+
+.dot {
+      height: 25px;
+      width: 25px;
+      background-color: #bbb;
+      border-radius: 50%;
+}
+
+.settings-container {
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-end;
+}
+
+.column-header {
+      margin-left: 25px;
+      display: flex;
+      align-items: center;
+}
+
+.module-text {
+      font-weight: bolder;
+      margin: 0px;
+}
+
+.column-module {
+      background-color: white;
+      margin-bottom: 20px;
+      padding: 10px;
+}
+
+.sticky-note-heading {
+      background-color: #EBD070;
+}
+
+.sticky-note-heading h3 {
+      padding: 10px;
+      margin: 0px;
+}
+
+.sticky-note-add {
+      float: right; //float yikes?
+}
+
+.sticky-note-row {
+      height: 15%;
+      background-color: #EFE8AA;
+      margin: 0px;
+      border-top: #958181 solid 1px;
+      display: flex;
+      align-items: center;
+      padding: 2px;
+}
+
+.sticky-note-row p {
+      margin-left: 10px;
+}
+
+.exercise-name {
+      text-decoration: underline;
+}
+
+
+.arrow-click {
+      float: right;
+      margin: 0px;
+}
+
+.module-clickable:hover {
+      background-color: #E7ECF3;
+      transition: 0.1s;
+}
+
+.exercise-container {
+      display: none;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      grid-row-gap: 10px;
+}
+
+.homework-column-dot {
+      margin-bottom: 10px;
+}
+
+.hide {
+      display: none;
+}
+
+#exercise-questions-input {
+      margin: 0px;
+      margin-top: 20px;
+      background-color: #E7ECF3;
+      padding-bottom: 20px;
+      resize: none;
+      width: 100%;
+      font-weight: bolder;
+}
+
+#column-bottom {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      height: 100%;
+}
+
+#settings-IMG {
+      width: 40px;
+}
+
+#column-heading {
+      margin-left: 20px;
+}
+
+#column-content {
+      width: 75%;
+      height: 75%;
+      background-color: #A2BFF9;
+      margin: auto;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      overflow-y: scroll;
+}
+
+#button-container {
+    margin-left: 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+}
+
+#button-container h1, a {
+    display: inline;
+}
+
+#button-container a {
+    height: 50%;
+    align-self: center;
+}
+
+#begin-exercise-name {
+    margin-left: 5px;
+    text-decoration: underline;
+}

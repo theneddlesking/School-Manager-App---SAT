@@ -1,0 +1,86 @@
+.questions-page-grid {
+      display: grid;
+      grid-template-rows: 1fr 1fr 3fr;
+      padding: 25px;
+}
+
+.questions-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 25%;
+}
+
+.progress {
+      background-color: white;
+      width: 50%;
+      height: 20px;
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+
+}
+
+.progress-bar {
+      background-color: #C4C4C4;
+      height: 10px;
+      margin: 10px;
+      width: 100%;
+}
+
+.progress-filled {
+      background-color: #3C64B1;
+      width: 80%;
+      height: 100%;
+}
+
+.large-button {
+      font-weight: bolder;
+      display: flex;
+}
+
+.large-button p {
+      padding: 10px;
+      background-color: white;
+}
+
+.question-buttons {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      height: 150px;
+}
+
+.question-button {
+      width: 100px;
+      font-size: 1.2em;
+      border: 3px solid black;
+      text-align: center;
+}
+
+.question-button p {
+      margin: 0px;
+      color: white;
+      padding: 10px;
+}
+
+.skip-button {
+      background-color: #F1796C;
+}
+
+.done-button {
+      background-color: #8DDDBE;
+}
+
+.questions-container {
+      display: flex;
+      align-items: center;
+      height: 200px;
+      justify-content: space-around;
+}
+
+.current-question {
+      background-color: white;
+      width: 750px;
+      height: 250px;
+}

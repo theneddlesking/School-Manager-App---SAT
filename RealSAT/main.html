@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>IMAGINE HAVING A NAME FOR YOUR PROJECT</title>
+
+    <link rel="stylesheet" href="./css/master.css">
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/questions.css">
+
+  </head>
+  <body>
+    <!-- TEMPLATES -->
+    <template id="temp-exercise-box">
+          <div class="exercise-box" onclick="selectExercise(this)">
+                <p id="exercise-box-name">Exercise Name</p>
+          </div>
+    </template>
+
+    <!-- MODULE TEMPLATES -->
+    <template id="exercise-container-module">
+          <div class='column-module exercise-container' id="exercise-container">
+          </div>
+    </template>
+    <template id="basic-column-module">
+          <div class='column-module'>
+                  <p class='module-text'>Dummy text.</p>
+          </div>
+    </template>
+    <template id="homework-column-module">
+          <div class='column-module'>
+                  <span class="dot homework-column-dot"></span>
+                  <p class='module-text'>Homework Title</p>
+                  <p class='homework-description'>Homework Desc</p>
+          </div>
+    </template>
+    <template id="upload-pdf-module">
+        <div class='column-module module-clickable' onclick='uploadPDF()'>
+                <p class='module-text'>Upload PDF
+                <span class='arrow-click'>></span>
+                </p>
+        </div>
+    </template>
+    <template id="input-questions-module">
+        <div id='input-questions' class='column-module'>
+                <p class='module-text' id='input-exercise-name'>Exercise Name Questions</p>
+                <textarea id='exercise-questions-input'></textarea>
+        </div>
+    </template>
+    <template id="begin-exercise-module">
+        <div id='begin-exercise' class='column-module module-clickable' onclick='beginExercise()'>
+                <p class='module-text'>Begin exercise<span id='begin-exercise-name' onclick='exerciseSelect()'>Exercise Name</span> <span class='arrow-click'>></span> </p>
+        </div>
+    </template>
+
+    <div id="main" class="hide page main-grid">
+        <div class="main-container container flex-container">
+              <div class="schedule-container container">
+                  <nav id="button-container">
+                    <a id="left" onclick="changeDay(-1)" href="#" class="unselectable"><</a>
+                    <h3 id="schedule-header">Schedule</h3>
+                    <a id="right" onclick="changeDay(1)" href="#" class="unselectable">></a>
+                  </nav>
+                  <div class="subject highlighted-subject" onclick="updateSubjectColumn(0)">
+                      <p class="subject-name">Subject Not Loaded</p>
+                  </div>
+                  <div class="subject" onclick="updateSubjectColumn(1)">
+                      <p class="subject-name">Subject Not Loaded</p>
+                  </div>
+                  <div class="subject" onclick="updateSubjectColumn(2)">
+                      <p class="subject-name">Subject Not Loaded</p>
+                  </div>
+                  <div class="subject" onclick="updateSubjectColumn(3)">
+                      <p class="subject-name">Subject Not Loaded</p>
+                  </div>
+              </div>
+              <h1></h1>
+              <div class="settings-container container">
+                    <img src="./images/settings.png" alt="" id="settings-IMG">
+              </div>
+        </div>
+
+        <div class="main-column container">
+              <div class="column-header container">
+                    <span id="subject-column-dot" class="dot"></span>
+                    <h3 id="column-heading">Subject Name</h3>
+              </div>
+              <div class="container" id="column-content">
+                    <div class="container" id="column-top">
+
+                    </div>
+                    <div class="container" id="column-bottom">
+
+                    </div>
+              </div>
+        </div>
+        <div class="sticky-note-container container flex-container">
+              <div class="homework-container sticky-note container" id="homework">
+                    <div class="sticky-note-heading" onclick="replaceColumnWithHomework()">
+                          <h3>Homework <span class="sticky-note-add" id="add-homework">+</span></h3>
+                    </div>
+                    <div class="sticky-note-row">
+
+                    </div>
+                    <div class="sticky-note-row">
+
+                    </div>
+                    <div class="sticky-note-row">
+
+                    </div>
+                    <div class="sticky-note-row">
+
+                    </div>
+                    <div class="sticky-note-row">
+
+                    </div>
+              </div>
+              <div class="notes-container sticky-note container">
+                    <div class="sticky-note-heading">
+                          <h3>Notes / Reminders <span class="sticky-note-add" id="add-note">+</span></h3>
+                    </div>
+                    <div class="sticky-note-row">
+
+                    </div>
+                    <div class="sticky-note-row">
+
+                    </div>
+                    <div class="sticky-note-row">
+
+                    </div>
+                    <div class="sticky-note-row">
+
+                    </div>
+                    <div class="sticky-note-row">
+
+                    </div>
+              </div>
+        </div>
+    </div>
+
+    <div id="questions-page" class="page questions-page-grid hide">
+          <div class="questions-nav">
+                <div class="large-button white-button" onclick="loadPage('main')">
+                      <p >Back < </p>
+                </div>
+                <h3>Exercise 16B - Subject Name</h3>
+          </div>
+          <div class="progress">
+                <div class="progress-bar">
+                      <div class="progress-filled">
+
+                      </div>
+                </div>
+          </div>
+          <div class="questions-container">
+                <div class="prev-question large-button white-button">
+                      <p> < </p>
+                </div>
+                <div class="current-question">
+                      <p>---QUESTION CONTENT---</p>
+                </div>
+                <div class="question-buttons">
+                      <div class="question-button skip-button">
+                            <p>SKIP</p>
+                      </div>
+                      <div class="question-button done-button">
+                            <p>DONE</p>
+                      </div>
+                </div>
+          </div>
+    </div>
+      <script src="./main.js" charset="utf-8"></script>
+      <script src="./debugger.js" charset="utf-8"></script>
+      <script src="./columnModules.js" charset="utf-8"></script>
+      <script src="./schedule.js" charset="utf-8"></script>
+      <script src="./homeworkColumn.js" charset="utf-8"></script>
+      <script src="./subjectColumn.js" charset="utf-8"></script>
+      <script src="./stickyNote.js" charset="utf-8"></script>
+
+  </body>
+</html>
