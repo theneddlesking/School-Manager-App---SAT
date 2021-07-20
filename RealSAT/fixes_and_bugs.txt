@@ -1,0 +1,1 @@
+Long subject name breaks the column. ie. Visual Communications and Design

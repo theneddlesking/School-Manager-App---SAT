@@ -10,7 +10,7 @@ var currentSubjectData;
 var homework = [];
 var notes = [];
 
-
+var subjectIndex = 0;
 class Subject {
       constructor(name, colour) {
             this.name = name;
@@ -19,6 +19,8 @@ class Subject {
             this.exerciseName = "16E";
             this.exerciseQuestions = [];
             this.exerciseQuestionsText = "1all, 2all, 3all";
+            this.subjectIndex = subjectIndex;
+            subjectIndex++;
       }
 
       updateExerciseData() {

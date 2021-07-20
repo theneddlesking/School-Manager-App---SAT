@@ -2,4 +2,8 @@ POTENTITAL FEATURES
 -------------------
 revision: add specific questions to redo for revision for exam / SAC
 -add the ability for users to create revision packs or custom solutions / corrections for solutions
--collaboration / teacher feedback 
+-collaboration / teacher feedback
+
+*none of that is happening this year lol
+
+-upload related files for a task? ie. SAC notification form

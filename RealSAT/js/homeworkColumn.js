@@ -33,7 +33,7 @@ function getHomeworkData() {
               addHomework : function(homeworkTask) { //makes sure that homework is added to both arrays for quick searching later
                     this.homework.push(homeworkTask);
 
-                    if (this.homeworkBySubject[homeworkTask.subject.name] == undefined) { //may bug later if you change subjects by storing more than 6 subjects
+                    if (this.homeworkBySubject[homeworkTask.subject.name] == undefined) { //may bug later if you change subjects by storing more than 6 subjects but this should be impossible with input control
                           this.homeworkBySubject[homeworkTask.subject.name] = [];
                     }
 
@@ -100,6 +100,10 @@ function replaceColumnWithHomework() {
                 //create html
                 var homeworkElem = document.getElementById("homework-column-module").content.cloneNode(true);
                 homeworkElem.querySelector(".module-text").textContent = title + " - " + homework.dueDate;
+                homeworkElem.querySelector(".column-module").onclick = function() { replaceColumnWithItem("homework", i) };
+
+
+
                 homeworkElem.querySelector(".homework-description").textContent = description;
                 homeworkElem.querySelector(".dot").style.display = "block";
                 homeworkElem.querySelector(".dot").style.backgroundColor = homework.subject.colour;

@@ -22,11 +22,13 @@
           <div class='column-module exercise-container' id="exercise-container">
           </div>
     </template>
+    <!-- default module -->
     <template id="basic-column-module">
           <div class='column-module'>
                   <p class='module-text'>Dummy text.</p>
           </div>
     </template>
+    <!-- homework data -->
     <template id="homework-column-module">
           <div class='column-module'>
                   <span class="dot homework-column-dot"></span>
@@ -53,7 +55,39 @@
         </div>
     </template>
 
-    <div id="main" class="hide page main-grid">
+    <template id="edit-homework">
+
+          <div class="inline-container">
+              <p class="inline bold">Title </p>
+              <input id="item-name" type="text" name="" value="Name of task. ie. Read Tracks." class="mb-20 inline ml-20">
+          </div>
+
+          <div class="dot-container inline-container">
+                <p class="inline bold">Subject  </p>
+
+                <span id="item-dot" class="dot ml-20"></span>
+                <select id="item-subject" class="ml-20" onchange="updateDot(this.value)">
+
+                </select>
+
+          </div>
+          <p class="bold">Description </p>
+                <textarea name="name" id="item-description">Description.</textarea>
+
+    </template>
+
+    <template id="edit-homework-bottom">
+            <div class="container inline-buttons">
+                  <div class="large-button white-button">
+                        <p>Submit</p>
+                  </div>
+                  <div class="large-button white-button">
+                        <p>Cancel</p>
+                  </div>
+            </div>
+    </template>
+
+    <div id="main" class="page main-grid hide">
         <div class="main-container container flex-container">
               <div class="schedule-container container">
                   <nav id="button-container">
@@ -99,16 +133,16 @@
                     <div class="sticky-note-heading" onclick="replaceColumnWithHomework()">
                           <h3>Homework <span class="sticky-note-add" id="add-homework">+</span></h3>
                     </div>
-                    <div class="sticky-note-row">
+                    <div class="sticky-note-row" onclick="replaceColumnWithItem(homework, 0)">
 
                     </div>
-                    <div class="sticky-note-row">
+                    <div class="sticky-note-row" onclick="replaceColumnWithItem(homework, 1)">
 
                     </div>
-                    <div class="sticky-note-row">
+                    <div class="sticky-note-row" onclick="replaceColumnWithItem(homework, 2)">
 
                     </div>
-                    <div class="sticky-note-row">
+                    <div class="sticky-note-row" onclick="replaceColumnWithItem(homework, 3)">
 
                     </div>
                     <div class="sticky-note-row">
@@ -138,7 +172,7 @@
         </div>
     </div>
 
-    <div id="questions-page" class="page questions-page-grid hide">
+    <div id="questions-page" class="page hide">
           <div class="questions-nav">
                 <div class="large-button white-button" onclick="loadPage('main')">
                       <p >Back < </p>
@@ -169,13 +203,13 @@
                 </div>
           </div>
     </div>
-      <script src="./main.js" charset="utf-8"></script>
-      <script src="./debugger.js" charset="utf-8"></script>
-      <script src="./columnModules.js" charset="utf-8"></script>
-      <script src="./schedule.js" charset="utf-8"></script>
-      <script src="./homeworkColumn.js" charset="utf-8"></script>
-      <script src="./subjectColumn.js" charset="utf-8"></script>
-      <script src="./stickyNote.js" charset="utf-8"></script>
-
+      <script src="./js/main.js" charset="utf-8"></script>
+      <script src="./js/debugger.js" charset="utf-8"></script>
+      <script src="./js/columnModules.js" charset="utf-8"></script>
+      <script src="./js/schedule.js" charset="utf-8"></script>
+      <script src="./js/homeworkColumn.js" charset="utf-8"></script>
+      <script src="./js/subjectColumn.js" charset="utf-8"></script>
+      <script src="./js/stickyNote.js" charset="utf-8"></script>
+      <script src="./js/itemColumn.js" charset="utf-8"></script>
   </body>
 </html>
