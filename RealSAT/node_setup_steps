@@ -1,0 +1,9 @@
+1. Go to file.
+cd Documents/GitHub/SAT/RealSAT
+
+2. Set up proxys.
+npm config set http-proxy http://OLS0010:password@10.130.80.19:8080
+npm config set https-proxy http://OLS0010:password@10.130.80.19:8080
+
+3. Start server.
+node index.js
