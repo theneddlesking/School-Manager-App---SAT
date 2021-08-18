@@ -35,7 +35,5 @@ pdf(dataBuffer).then(function(data) {
     console.log(data.version);
     // PDF text
     //console.log(data.text);
-
     console.log(data);
-
 });

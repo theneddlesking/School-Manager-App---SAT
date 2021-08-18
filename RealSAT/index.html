@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./css/master.css">
     <link rel="stylesheet" href="./css/main.css">
     <link rel="stylesheet" href="./css/questions.css">
+    <link rel="stylesheet" href="./css/pdfDisplay.css">
 
   </head>
   <body>
@@ -51,7 +52,7 @@
     </template>
     <template id="begin-exercise-module">
         <div id='begin-exercise' class='column-module module-clickable' onclick='beginExercise()'>
-                <p class='module-text'>Begin exercise<span id='begin-exercise-name' onclick='exerciseSelect()'>Exercise Name</span> <span class='arrow-click'>></span> </p>
+                <p onclick="loadPage('questions')" class='module-text'>Begin exercise<span id='begin-exercise-name' onclick='exerciseSelect()'>Exercise Name</span> <span class='arrow-click'>></span> </p>
         </div>
     </template>
 
@@ -191,7 +192,9 @@
                       <p> < </p>
                 </div>
                 <div class="current-question">
-                      <p>---QUESTION CONTENT---</p>
+                      <div id="pdf-container">
+                          <iframe id="pdf-iframe" src="Answers.pdf#toolbar=0&&zoom=90&&page=3" width="750px" height="400px" style="pointer-events: none"></iframe>
+                      </div>
                 </div>
                 <div class="question-buttons">
                       <div class="question-button skip-button">
@@ -211,5 +214,6 @@
       <script src="./js/subjectColumn.js" charset="utf-8"></script>
       <script src="./js/stickyNote.js" charset="utf-8"></script>
       <script src="./js/itemColumn.js" charset="utf-8"></script>
+      <script src="./js/pdfCrop.js" charset="utf-8"></script>
   </body>
 </html>

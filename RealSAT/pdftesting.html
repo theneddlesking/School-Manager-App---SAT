@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>PDF Crop</title>
+    <link rel="stylesheet" href="pdftesting.css">
+
+    <style media="screen">
+    #pdfContainer {
+        background-color: red;
+        width: 704px;
+        height: 880px;
+        overflow: hidden;
+    }
+
+    #pdf {
+          position: relative;
+          overflow: hidden;
+    }
+
+    </style>
+
+  </head>
+    <body>
+        <p>Text above.</p>
+        <div id="pdfContainer">
+            <iframe id="pdf" src="Answers.pdf#toolbar=0&&zoom=90&&page=3" width="750px" height="900px" style="pointer-events: none"></iframe>
+        </div>
+        <p>Text below.</p>
+  </body>
+  <script type="text/javascript">
+
+        //exact
+        const colTopCrop = 75; //crop top of column
+        const colHeight = 765; //height of the entire column
+        const firstPageCrop = 280; //crop of first page (space above)
+
+        //mostly exact
+        const chapterHeight = 30; //height of chapter heading
+        const exerciseHeight = 18; //height of exercise heading
+
+        //mostly accurate
+
+        //heights of PDF elements
+        const line = 14; //height of regular text
+        const medLine = 18; //height of medium text (ie. small fractions, etc.)
+        const fraction = 26;
+
+        //largely different
+
+        const hybridFunc = 3;
+        const numberLine = 32;
+        const smallGraph = 92;
+        const medGraph = 106;
+        const largeGraph = 120;
+        const surd = 2;
+
+        const exerciseSpacing = 12;
+
+        //cropColumn(1, firstPageCrop + chapterHeight + exerciseHeight + 0, lineHeight);
+        cropColumn(2, 0, line*3 + medGraph*2 + fraction*1 + fraction*1 + line + hybridFunc + hybridFunc + fraction*2 + hybridFunc + line + fraction + line  + hybridFunc + surd + line*2 + surd + hybridFunc + line*2 + surd + largeGraph + hybridFunc + medLine*2 + line + line*2);
+
+        function cropColumn(col, top, height) {
+              var right = 255;
+              var left;
+              if (col == 1) {
+                    left = 125;
+              } else {
+                    left = 400;
+              }
+              makeCrop(left, right, top+colTopCrop, height);
+        }
+
+        function makeCrop(left, right, top, bottom) {
+              var pdf = document.getElementById("pdf");
+              var pdfContainer = document.getElementById("pdfContainer");
+              pdf.style.left = -1 * left +"px";
+              pdf.style.top = -1 * top +"px";
+              pdfContainer.style.width = right+"px";
+              pdfContainer.style.height = bottom+"px";
+        }
+  </script>
+</html>
