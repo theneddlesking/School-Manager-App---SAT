@@ -83,4 +83,5 @@
       background-color: white;
       width: 750px;
       height: 250px;
+      overflow: hidden;
 }

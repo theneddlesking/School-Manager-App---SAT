@@ -24,7 +24,7 @@
     <body>
         <p>Text above.</p>
         <div id="pdfContainer">
-            <iframe id="pdf" src="Answers.pdf#toolbar=0&&zoom=90&&page=3" width="750px" height="900px" style="pointer-events: none"></iframe>
+            <iframe id="pdf" src="" width="750px" height="900px" style="pointer-events: none"></iframe>
         </div>
         <p>Text below.</p>
   </body>
@@ -58,7 +58,9 @@
         const exerciseSpacing = 12;
 
         //cropColumn(1, firstPageCrop + chapterHeight + exerciseHeight + 0, lineHeight);
-        cropColumn(2, 0, line*3 + medGraph*2 + fraction*1 + fraction*1 + line + hybridFunc + hybridFunc + fraction*2 + hybridFunc + line + fraction + line  + hybridFunc + surd + line*2 + surd + hybridFunc + line*2 + surd + largeGraph + hybridFunc + medLine*2 + line + line*2);
+        //cropColumn(2, 0, line*3 + medGraph*2 + fraction*1 + fraction*1 + line + hybridFunc + hybridFunc + fraction*2 + hybridFunc + line + fraction + line  + hybridFunc + surd + line*2 + surd + hybridFunc + line*2 + surd + largeGraph + hybridFunc + medLine*2 + line + line*2);
+
+        makeCrop(40, 660, 600, 100);
 
         function cropColumn(col, top, height) {
               var right = 255;

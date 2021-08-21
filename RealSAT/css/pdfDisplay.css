@@ -9,3 +9,7 @@
       position: relative;
       overflow: hidden;
 }
+
+.no-scrolling {
+      pointer-events: none;
+}
