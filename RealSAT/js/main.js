@@ -1,6 +1,6 @@
 //add array of accepted pages later if we needed more than 2 pages
 
-loadPage("questions")
+loadPage("main")
 
 function loadPage(page) {
         var main = document.getElementById("main");

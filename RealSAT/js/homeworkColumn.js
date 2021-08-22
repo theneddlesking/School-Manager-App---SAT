@@ -1,4 +1,5 @@
 
+
 class HomeworkTask {
       constructor(subject, dueDate, title, description, isPDFWork) {
             this.subject = subject;
@@ -48,8 +49,25 @@ function getHomeworkData() {
         return homeworkData;
 }
 
+var homeworkData = getHomeworkData();
+
+var replaceColumn = true; //makes sure buttons aren't double pressed
+
+function addHomework() {
+      alert("add homework")
+      replaceColumn = false;
+      replaceColumnWithItem("homework", "add");
+}
 
 function replaceColumnWithHomework() {
+        if (!replaceColumn) {
+              replaceColumn = true;
+              return;
+        }
+        replaceColumn = true;
+
+
+        alert("other")
         var homeworkData = getHomeworkData();
 
         //validate data
@@ -96,13 +114,10 @@ function replaceColumnWithHomework() {
 
                 //length validation? - long titles / descriptions are weird
 
-
                 //create html
                 var homeworkElem = document.getElementById("homework-column-module").content.cloneNode(true);
                 homeworkElem.querySelector(".module-text").textContent = title + " - " + homework.dueDate;
                 homeworkElem.querySelector(".column-module").onclick = function() { replaceColumnWithItem("homework", i) };
-
-
 
                 homeworkElem.querySelector(".homework-description").textContent = description;
                 homeworkElem.querySelector(".dot").style.display = "block";

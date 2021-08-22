@@ -2,13 +2,21 @@ function getHomeworkTask(itemIndex) {
         //replace with some fetch later;
         var homeworkData = getHomeworkData();
 
-
         var data = homeworkData.homework[itemIndex];
 
         return data;
 }
 
-
+var emptyHomework = {
+    "subject": {},
+    "dueDate": "",
+    "description": "",
+    "title": "",
+    "hasTitle": false,
+    "hasDescription": false,
+    "isPDFWork": false,
+    "pdfData": {}
+}
 
 function loadOptions() {
         var select = document.getElementById("item-subject");
@@ -22,24 +30,21 @@ function loadOptions() {
 function replaceColumnWithItem(itemType, itemIndex) {
         //index the item later
 
-        alert(itemIndex)
-
         if (itemType == "homework") {
 
         }
 
+        if (itemIndex == "add") { //add mode creates a blank version
+              var itemData = emptyHomework;
+        } else { //editting a previous homework task
+              var itemData = getHomeworkTask(itemIndex);
 
-
-        var itemData = getHomeworkTask(itemIndex);
-
-        if (itemData == undefined || itemData == null) {
-              return;
+              if (itemData == undefined || itemData == null) { //existence check
+                    return;
+              }
         }
 
-
-
         console.log(itemData);
-
 
         //reset column
 
@@ -56,8 +61,16 @@ function replaceColumnWithItem(itemType, itemIndex) {
 
         loadOptions();
 
+        //insert data into column
+
         homeworkColumnTop.querySelector("#item-dot").style.backgroundColor = itemData.subject.colour;
-        homeworkColumnTop.querySelector("#item-subject").selectedIndex = itemData.subject.subjectIndex;
+
+        if (itemIndex == "add") {
+              homeworkColumnTop.querySelector("#item-subject").value = "";
+        } else {
+              homeworkColumnTop.querySelector("#item-subject").value = itemData.subject.name;
+        }
+
 
         homeworkColumnTop.querySelector("#item-name").value = itemData.title;
         homeworkColumnTop.querySelector("#item-description").value = itemData.description;

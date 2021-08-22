@@ -22,7 +22,8 @@ function updateSubjectColumn(subjectID, isSubject) {
 
         var subjectData = getSubjectData(subject);
 
-        console.log(subjectData);  if (subjectData == "Data not found.") { //check to see if data exists
+        console.log(subjectData);
+        if (subjectData == "Data not found.") { //check to see if data exists
               Debugger.log("Could not retrieve subject data.");
               return;
         }

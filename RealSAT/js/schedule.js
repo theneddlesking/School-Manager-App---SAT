@@ -28,6 +28,8 @@ class Subject {
       }
 }
 
+var mySubjects = [];
+
 var mySubjects = [
     new Subject("Specialist Math", "#F1796C"),
     new Subject("Physics", "#EBD070"),

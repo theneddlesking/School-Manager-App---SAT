@@ -1,0 +1,17 @@
+TODO:
+1. Add database
+2. Add buttons that work (submit, cancel, skip, question done, question back)
+6. Add notes and reminders to work
+7. Add homework overflow to work (last priority just ignore this for now)
+8. Add the actual PDF 10000IQ algorithm
+9. Make the security document
+10. Screencast, complex algorithm, etc.
+13. Fix custom exercise select
+
+3. Add CSS hover everywhere including shading and cursor change
+4. Add launch page to choose subjects
+5. Add data validation where necessary
+11. Add additional comments
+12. Add homework to appear on subject column
+14. Store column modules somehow (by name)
+15. Download data

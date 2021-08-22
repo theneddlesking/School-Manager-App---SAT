@@ -79,8 +79,8 @@
 
     <template id="edit-homework-bottom">
             <div class="container inline-buttons">
-                  <div class="large-button white-button">
-                        <p>Submit</p>
+                  <div class="large-button white-button" onclick="updateHomeworkData()">
+                        <p name="button">Submit</p>
                   </div>
                   <div class="large-button white-button">
                         <p>Cancel</p>
@@ -129,10 +129,15 @@
                     </div>
               </div>
         </div>
+
+        <form id="subject-submit" action="index.html" method="post">
+              <button type="submit" name="button">Add subjects</button>
+        </form>
+
         <div class="sticky-note-container container flex-container">
               <div class="homework-container sticky-note container" id="homework">
                     <div class="sticky-note-heading" onclick="replaceColumnWithHomework()">
-                          <h3>Homework <span class="sticky-note-add" id="add-homework">+</span></h3>
+                          <h3>Homework <span class="sticky-note-add" id="add-homework" onclick="addHomework()">+</span></h3>
                     </div>
                     <div class="sticky-note-row" onclick="replaceColumnWithItem(homework, 0)">
 
@@ -215,5 +220,6 @@
       <script src="./js/stickyNote.js" charset="utf-8"></script>
       <script src="./js/itemColumn.js" charset="utf-8"></script>
       <script src="./js/pdfCrop.js" charset="utf-8"></script>
+      <script src="./db.js" charset="utf-8"></script>
   </body>
 </html>
