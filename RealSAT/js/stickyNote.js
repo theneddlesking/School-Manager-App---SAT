@@ -32,9 +32,3 @@ function addNewItemToStickyNote(homeworkData, index, note) {
       stickyRows[index].appendChild(text);
 
 }
-
-
-var homeworkData = getHomeworkData();
-
-addNewItemToStickyNote(homeworkData.homework[0], 0, "homework");
-addNewItemToStickyNote(homeworkData.homework[1], 1, "homework");

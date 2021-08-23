@@ -84,6 +84,4 @@ function updateDot(subject) {
         var data = getSubjectData(subject);
         var dot = document.getElementById("item-dot");
         dot.style.backgroundColor = data.colour;
-
-
 }

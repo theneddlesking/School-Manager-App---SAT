@@ -1,10 +1,4 @@
-if (classRightNow == "Weekend" || classRightNow == "After School" || classRightNow == "On Break" || classRightNow == "Before School") {
-        //if not in class then display column with next class data
-        updateSubjectColumn(getNextClass(actualDay), true);
-} else {
-        //if in class then display column with current class data
-        updateSubjectColumn(classRightNow, true);
-}
+
 
 function updateSubjectColumn(subjectID, isSubject) {
         if (isSubject === undefined) {

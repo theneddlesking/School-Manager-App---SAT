@@ -1,5 +1,5 @@
 TODO:
-1. Add database
+1. Add database 
 2. Add buttons that work (submit, cancel, skip, question done, question back)
 6. Add notes and reminders to work
 7. Add homework overflow to work (last priority just ignore this for now)
@@ -15,3 +15,4 @@ TODO:
 12. Add homework to appear on subject column
 14. Store column modules somehow (by name)
 15. Download data
+16. Make the data fetch less cringe (nesting = cringe)

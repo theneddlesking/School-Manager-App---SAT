@@ -25,7 +25,7 @@
 //potentially could have stages to fall back on true false positives?
 //last stage could be guess?
 
-var cambridge = {
+var cambridge = { //in object so that other textbooks can eventually be added in furture versions
       rawPDFs : [],
 
       pdfs : [],

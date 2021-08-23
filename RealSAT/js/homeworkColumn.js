@@ -49,12 +49,11 @@ function getHomeworkData() {
         return homeworkData;
 }
 
-var homeworkData = getHomeworkData();
+var homeworkData;
 
 var replaceColumn = true; //makes sure buttons aren't double pressed
 
 function addHomework() {
-      alert("add homework")
       replaceColumn = false;
       replaceColumnWithItem("homework", "add");
 }
@@ -66,14 +65,7 @@ function replaceColumnWithHomework() {
         }
         replaceColumn = true;
 
-
-        alert("other")
         var homeworkData = getHomeworkData();
-
-        //validate data
-
-
-        //
 
         //add column content
 
@@ -116,6 +108,7 @@ function replaceColumnWithHomework() {
 
                 //create html
                 var homeworkElem = document.getElementById("homework-column-module").content.cloneNode(true);
+                homeworkElem.id = "homework-to-add";
                 homeworkElem.querySelector(".module-text").textContent = title + " - " + homework.dueDate;
                 homeworkElem.querySelector(".column-module").onclick = function() { replaceColumnWithItem("homework", i) };
 
@@ -125,4 +118,25 @@ function replaceColumnWithHomework() {
 
                 homeworkColumn.appendChild(homeworkElem);
         }
+}
+
+
+function validateHomework() {
+        //check if inputs are valid and then update data
+        var title = document.getElementById("item-name").textContent;
+        var description = document.getElementById("item-description").value;
+        var colour = document.getElementById("item-dot").style.backgroundColor;
+        var subject = getSubjectFromName(document.getElementById("item-subject").value);
+        var dueDate = "5/6"
+
+        if (subject == undefined || subject == null || subject == "") {
+              alert("Please select a subject.");
+              return false;
+        }
+
+        homeworkData.addHomework( new HomeworkTask(subject, dueDate, title, description, false) );
+
+        console.log(homeworkData);
+
+        return true;
 }

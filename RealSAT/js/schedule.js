@@ -10,34 +10,8 @@ var currentSubjectData;
 var homework = [];
 var notes = [];
 
-var subjectIndex = 0;
-class Subject {
-      constructor(name, colour) {
-            this.name = name;
-            this.colour = colour;
-            this.columnModules = [addModuleToSubject("Upload PDF")];
-            this.exerciseName = "16E";
-            this.exerciseQuestions = [];
-            this.exerciseQuestionsText = "1all, 2all, 3all";
-            this.subjectIndex = subjectIndex;
-            subjectIndex++;
-      }
-
-      updateExerciseData() {
-            //reset exercise questions, exercise questions text
-      }
-}
 
 var mySubjects = [];
-
-var mySubjects = [
-    new Subject("Specialist Math", "#F1796C"),
-    new Subject("Physics", "#EBD070"),
-    new Subject("Chemistry", "#EBD070"),
-    new Subject("English", "#3C64B1"),
-    new Subject("Math Methods", "#F1796C"),
-    new Subject("Software Development", "#8DDDBE")
-];
 
 function addModuleToSubject(moduleName) {
         for (var i=0; i < baseColumnModules.length; i++) {
@@ -57,10 +31,6 @@ function addModulesToSubject(subject, modules) {
         }
 }
 
-addModulesToSubject(mySubjects[0], ["Begin Exercise", "Input Questions", "Exercise Box"])
-addModulesToSubject(mySubjects[1], ["Begin Exercise", "Input Questions", "Exercise Box"])
-
-mySubjects[1].exerciseName = "7A";
 
 var periods = [
    {
@@ -233,7 +203,7 @@ function highlightCurrentPeriod(today) {
     }
 }
 
-function receiveData() {
+function receiveTimetableData() {
       subjects = [].concat(mySubjects);
       week = [
          [subjects[0].name, subjects[1].name, subjects[2].name, subjects[3].name],
@@ -246,24 +216,12 @@ function receiveData() {
      getSchedule(currentDay);
 }
 
-function getSubjectData(subject) {
-        //some fetch or something
-        for (var i=0; i < mySubjects.length; i++) {
-              if (mySubjects[i].name == subject) {
-                    return mySubjects[i];
-              }
-        }
-
-        return "Data not found.";
-}
-
-
 
 function changeDay(num) {
       currentDay.setDate(currentDay.getDate()+num);
       getSchedule(currentDay);
 }
 
-receiveData();
 
-var classRightNow = getSubjectRightNow(actualDay);
+
+var classRightNow;

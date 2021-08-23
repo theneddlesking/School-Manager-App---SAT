@@ -1,17 +1,20 @@
-//add array of accepted pages later if we needed more than 2 pages
-
-loadPage("main")
+//LOAD DIFFERENT PAGES - USEFUL FOR QUICKLY DEBUGGING
 
 function loadPage(page) {
-        var main = document.getElementById("main");
-        var questions = document.getElementById("questions-page");
-        if (page == "main") {
-              questions.classList.add("hide");
-              questions.classList.remove("questions-page-grid");
-              main.classList.remove("hide");
+        var pages = [
+                document.getElementById("main"),
+                document.getElementById("questions-page"),
+                document.getElementById("start-page"),
+        ];
+        for (var i=0; i < pages.length; i++) {
+              pages[i].classList.add("hide");
+        }
+        document.getElementById(page).classList.remove("hide");
+
+
+        if (page == "questions-page") {
+              document.getElementById("questions-page").classList.add("questions-page-grid");
         } else {
-              main.classList.add("hide");
-              questions.classList.remove("hide");
-              questions.classList.add("questions-page-grid");
+              document.getElementById("questions-page").classList.remove("questions-page-grid");
         }
 }

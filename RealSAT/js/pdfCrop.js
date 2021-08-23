@@ -29,7 +29,7 @@ const exerciseSpacing = 12;
 const pageHeight = 970;
 const pageWidth = 735;
 
-const MAGIC_FACTOR = 0.82; //as width increases the zoom calculations are less reliable so we reduce the width value to mitigate error
+
 
 //cropColumn(1, firstPageCrop + chapterHeight + exerciseHeight + 0, lineHeight);
 //cropColumn(2, 0, line*3 + medGraph*2 + fraction*1 + fraction*1 + line + hybridFunc + hybridFunc + fraction*2 + hybridFunc + line + fraction + line  + hybridFunc + surd + line*2 + surd + hybridFunc + line*2 + surd + largeGraph + hybridFunc + medLine*2 + line + line*2);
@@ -67,6 +67,7 @@ var questionData = {
 //zooms the question to fill the box
 const BOX_WIDTH = 750;
 const BOX_HEIGHT = 250;
+const MAGIC_FACTOR = 0.82; //as width increases the zoom calculations are less reliable so we reduce the width value to mitigate error
 
 var zoom = Math.max((questionData.width * MAGIC_FACTOR) / BOX_WIDTH, questionData.height / BOX_HEIGHT);
 

@@ -40,8 +40,6 @@ var ColumnModules = {
           }
 }
 
-//selecting stops multipress
-var selecting = false;
 
 function getAvailableExercises() {
       return [{
@@ -68,6 +66,9 @@ function getAvailableExercises() {
       ];
 }
 
+//selecting stops multipress
+var selecting = false;
+
 function exerciseSelect() {
         selecting = true;
         Debugger.log("Select exercise");
@@ -89,6 +90,7 @@ function exerciseSelect() {
 function beginExercise() {
       if (!selecting) {
             Debugger.log("Begin exercise");
+            loadPage("questions-page");
       } else {
             selecting = false;
       }

@@ -52,7 +52,7 @@
     </template>
     <template id="begin-exercise-module">
         <div id='begin-exercise' class='column-module module-clickable' onclick='beginExercise()'>
-                <p onclick="loadPage('questions')" class='module-text'>Begin exercise<span id='begin-exercise-name' onclick='exerciseSelect()'>Exercise Name</span> <span class='arrow-click'>></span> </p>
+                <p class='module-text'>Begin exercise<span id='begin-exercise-name' onclick='exerciseSelect()'>Exercise Name</span> <span class='arrow-click'>></span> </p>
         </div>
     </template>
 
@@ -130,10 +130,6 @@
               </div>
         </div>
 
-        <form id="subject-submit" action="index.html" method="post">
-              <button type="submit" name="button">Add subjects</button>
-        </form>
-
         <div class="sticky-note-container container flex-container">
               <div class="homework-container sticky-note container" id="homework">
                     <div class="sticky-note-heading" onclick="replaceColumnWithHomework()">
@@ -178,6 +174,46 @@
         </div>
     </div>
 
+    <div id="start-page" class="page hide">
+            <div class="container">
+              <h1>Welcome to my project</h1>
+              <h3>Add your subjects (subject 1 = Period 1 Monday subject 2 is next subject, etc.)</h3>
+            </div>
+
+            <div class="container">
+              <label for="">Subject 1 </label>
+              <input type="text" class="subject-input" list="subject-list"/>
+            </div>
+            <div class="container">
+              <label for="">Subject 2 </label>
+              <input type="text" name="" value="" class="subject-input" list="subject-list"/>
+            </div>
+            <div class="container">
+              <label for="">Subject 3 </label>
+              <input type="text" name="" value="" class="subject-input" list="subject-list"/>
+            </div>
+            <div class="container">
+              <label for="">Subject 4 </label>
+              <input type="text" name="" value="" class="subject-input" list="subject-list"/>
+            </div>
+            <div class="container">
+              <label for="">Subject 5 </label>
+              <input type="text" name="" value="" class="subject-input" list="subject-list"/>
+            </div>
+            <div class="container">
+              <label for="">Subject 6 </label>
+              <input type="text" name="" value="" class="subject-input" list="subject-list"/>
+            </div>
+            <form id="subject-submit" class="" action="index.html" method="post">
+                  <button type="submit" name="button">Submit</button>
+            </form>
+
+            <datalist id="subject-list">
+
+            </datalist>
+
+    </div>
+
     <div id="questions-page" class="page hide">
           <div class="questions-nav">
                 <div class="large-button white-button" onclick="loadPage('main')">
@@ -220,6 +256,8 @@
       <script src="./js/stickyNote.js" charset="utf-8"></script>
       <script src="./js/itemColumn.js" charset="utf-8"></script>
       <script src="./js/pdfCrop.js" charset="utf-8"></script>
-      <script src="./db.js" charset="utf-8"></script>
+      <script src="./js/db.js" charset="utf-8"></script>
+      <script src="./js/start.js" charset="utf-8"></script>
+      <script src="./js/subjects.js" charset="utf-8"></script>
   </body>
 </html>
