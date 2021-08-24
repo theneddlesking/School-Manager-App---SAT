@@ -24,6 +24,8 @@ function addNewItemToStickyNote(homeworkData, index, note) {
       dot.className = "dot";
       dot.style.backgroundColor = homeworkData.subject.colour;
 
+      stickyRows[index].innerHTML = "";
+
       stickyRows[index].appendChild(dot);
 
       var text = document.createElement("p");

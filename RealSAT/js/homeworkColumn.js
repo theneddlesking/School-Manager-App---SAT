@@ -25,14 +25,18 @@ class HomeworkTask {
 }
 
 
-function getHomeworkData() {
+function initialiseHomeworkData(data) {
         var homeworkData = {
               homework : [],
 
               homeworkBySubject : [],
 
               addHomework : function(homeworkTask) { //makes sure that homework is added to both arrays for quick searching later
+                    console.log(homeworkTask);
+
                     this.homework.push(homeworkTask);
+
+
 
                     if (this.homeworkBySubject[homeworkTask.subject.name] == undefined) { //may bug later if you change subjects by storing more than 6 subjects but this should be impossible with input control
                           this.homeworkBySubject[homeworkTask.subject.name] = [];
@@ -41,10 +45,42 @@ function getHomeworkData() {
                     this.homeworkBySubject[homeworkTask.subject.name].push( homeworkTask );
               },
 
+              displayHomework : function() {
+                      var homework = this.homework;
+                      for (var i=0; i < homework.length; i++) {
+                              addNewItemToStickyNote(homework[i], i, "homework")
+                      }
+              },
+
+              removeHomework : function(index) {
+                    if (index == "add") {
+                          return;
+                    }
+
+                    var task = this.homework[index];
+
+                    for (var i=0; i < this.homeworkBySubject[task.subject.name].length; i++) {
+                            if (this.homeworkBySubject[task.subject.name][i] == task) {
+                                  alert("pog")
+                            }
+                    }
+
+
+                    this.homework.splice(index, 1);
+
+              }
         };
 
-        homeworkData.addHomework( new HomeworkTask(mySubjects[0], "12 / 06", "Cute Proof", "Prove that complex numbers are cute", false) );
-        homeworkData.addHomework( new HomeworkTask(mySubjects[1], "12 / 07", "", "Split hydrogen atom", false) );
+        // homeworkData.addHomework( new HomeworkTask(mySubjects[0], "12 / 06", "Cute Proof", "Prove that complex numbers are cute", false) );
+        // homeworkData.addHomework( new HomeworkTask(mySubjects[1], "12 / 07", "", "Split hydrogen atom", false) );
+
+        if (data.homework.length == 1) {
+              for (var i=0; i < data.homework[0].homework.length; i++) {
+                      homeworkData.addHomework(data.homework[0].homework[i]);
+              }
+        }
+
+
 
         return homeworkData;
 }
@@ -64,8 +100,6 @@ function replaceColumnWithHomework() {
               return;
         }
         replaceColumn = true;
-
-        var homeworkData = getHomeworkData();
 
         //add column content
 
@@ -109,7 +143,7 @@ function replaceColumnWithHomework() {
                 //create html
                 var homeworkElem = document.getElementById("homework-column-module").content.cloneNode(true);
                 homeworkElem.id = "homework-to-add";
-                homeworkElem.querySelector(".module-text").textContent = title + " - " + homework.dueDate;
+                homeworkElem.querySelector(".module-text").textContent = title + " - " + (homework.dueDate + "").substring(0, 15);
                 homeworkElem.querySelector(".column-module").onclick = function() { replaceColumnWithItem("homework", i) };
 
                 homeworkElem.querySelector(".homework-description").textContent = description;
@@ -120,23 +154,30 @@ function replaceColumnWithHomework() {
         }
 }
 
+function isDateBeforeToday(date) {
+    return new Date(date.toDateString()) < new Date(new Date().toDateString());
+}
 
 function validateHomework() {
         //check if inputs are valid and then update data
-        var title = document.getElementById("item-name").textContent;
+        var title = document.getElementById("item-name").value;
         var description = document.getElementById("item-description").value;
         var colour = document.getElementById("item-dot").style.backgroundColor;
         var subject = getSubjectFromName(document.getElementById("item-subject").value);
-        var dueDate = "5/6"
+        var dueDate = new Date(document.getElementById("item-date").value);
 
         if (subject == undefined || subject == null || subject == "") {
               alert("Please select a subject.");
               return false;
         }
 
-        homeworkData.addHomework( new HomeworkTask(subject, dueDate, title, description, false) );
+        if (isDateBeforeToday(dueDate) ) { //can only set homework to a time in the future
+              alert("Please select a date in the future.");
+              return false;
+        }
 
-        console.log(homeworkData);
+        homeworkData.removeHomework( g_itemIndex);
+        homeworkData.addHomework( new HomeworkTask(subject, dueDate, title, description, false) );
 
         return true;
 }

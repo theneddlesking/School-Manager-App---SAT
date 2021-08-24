@@ -68,6 +68,10 @@ function updateHomeworkData() { //add and update
       var objectStore = transaction.objectStore('homework_os');
       var request = objectStore.clear();
 
+
+
+
+
       var data = {...homeworkData}; //spread operator makes shallow copy so that current data isn't overwritten
 
       for (var i=0; i < data.homework.length; i++) {
@@ -78,7 +82,8 @@ function updateHomeworkData() { //add and update
 
       data.homeworkBySubject = []; //cannot be serialised
       data.addHomework = ""; //cannot be serialised
-
+      data.displayHomework = ""; //cannot be serialised
+      data.removeHomework = "";
 
       var newItem = data;
 
@@ -94,6 +99,7 @@ function updateHomeworkData() { //add and update
           console.log('Transaction not opened due to error');
       };
 
+      retrieveData(startUp);
 }
 
 window.onload = function() {
@@ -166,6 +172,8 @@ window.onload = function() {
                 console.log('Transaction not opened due to error');
             };
       }
+
+      retrieveData(startUp);
   }
 
 };

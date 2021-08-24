@@ -18,3 +18,7 @@ function loadPage(page) {
               document.getElementById("questions-page").classList.remove("questions-page-grid");
         }
 }
+
+function loadMain(page) {
+      loadPage("main");
+}

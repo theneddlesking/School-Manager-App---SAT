@@ -1,9 +1,5 @@
 function getHomeworkTask(itemIndex) {
-        //replace with some fetch later;
-        var homeworkData = getHomeworkData();
-
         var data = homeworkData.homework[itemIndex];
-
         return data;
 }
 
@@ -26,6 +22,7 @@ function loadOptions() {
         }
 }
 
+var g_itemIndex;
 
 function replaceColumnWithItem(itemType, itemIndex) {
         //index the item later
@@ -35,8 +32,10 @@ function replaceColumnWithItem(itemType, itemIndex) {
         }
 
         if (itemIndex == "add") { //add mode creates a blank version
+          g_itemIndex = "add";
               var itemData = emptyHomework;
         } else { //editting a previous homework task
+              g_itemIndex = itemIndex;
               var itemData = getHomeworkTask(itemIndex);
 
               if (itemData == undefined || itemData == null) { //existence check
@@ -66,11 +65,13 @@ function replaceColumnWithItem(itemType, itemIndex) {
         homeworkColumnTop.querySelector("#item-dot").style.backgroundColor = itemData.subject.colour;
 
         if (itemIndex == "add") {
-              homeworkColumnTop.querySelector("#item-subject").value = "";
+              homeworkColumnTop.querySelector("#item-subject").value = mySubjects[0].name;
+              homeworkColumnTop.querySelector("#item-dot").style.backgroundColor = mySubjects[0].colour;
+              document.getElementById("item-date").valueAsDate = new Date();
         } else {
               homeworkColumnTop.querySelector("#item-subject").value = itemData.subject.name;
+              document.getElementById("item-date").valueAsDate = itemData.dueDate;
         }
-
 
         homeworkColumnTop.querySelector("#item-name").value = itemData.title;
         homeworkColumnTop.querySelector("#item-description").value = itemData.description;

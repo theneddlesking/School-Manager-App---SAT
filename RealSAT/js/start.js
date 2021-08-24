@@ -22,10 +22,13 @@ function startUp(data) { //triggers once data is fetched, otherwise webpage woul
 
         classRightNow = getSubjectRightNow(actualDay);
 
-        homeworkData = getHomeworkData();
+        homeworkData = initialiseHomeworkData(data);
 
-        addNewItemToStickyNote(homeworkData.homework[0], 0, "homework");
-        addNewItemToStickyNote(homeworkData.homework[1], 1, "homework");
+        homeworkData.displayHomework();
+
+
+
+
 
         if (classRightNow == "Weekend" || classRightNow == "After School" || classRightNow == "On Break" || classRightNow == "Before School") {
                 //if not in class then display column with next class data

@@ -51,18 +51,18 @@ var questionData = {
       right : 320,
 }
 
-// var questionData = {
-//       pageNumber : 5,
-//       pdfName : 'chapter1',
-//
-//       height : 70, //height of the question
-//       above : 725, //vertical space above the question
-//       width : 1200, //width of the question
-//
-//       //these will mostly be constant as most questions take the full width of the page
-//       left : 300,
-//       right : 320,
-// }
+var questionData = {
+      pageNumber : 5,
+      pdfName : 'chapter1',
+
+      height : 70, //height of the question
+      above : 725, //vertical space above the question
+      width : 1200, //width of the question
+
+      //these will mostly be constant as most questions take the full width of the page
+      left : 300,
+      right : 320,
+}
 
 //zooms the question to fill the box
 const BOX_WIDTH = 750;
@@ -70,7 +70,6 @@ const BOX_HEIGHT = 250;
 const MAGIC_FACTOR = 0.82; //as width increases the zoom calculations are less reliable so we reduce the width value to mitigate error
 
 var zoom = Math.max((questionData.width * MAGIC_FACTOR) / BOX_WIDTH, questionData.height / BOX_HEIGHT);
-
 
 console.log("zoom: " + zoom);
 //makeCrop(40, 660, 0, 970, 1);
