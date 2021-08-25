@@ -31,7 +31,7 @@
     </template>
     <!-- note data -->
     <template id="note-column-module">
-          <div class='column-module'>
+          <div class='column-module clickable'>
                   <p class='module-text'>Note Title</p>
                   <p class='note-description'>Note Desc</p>
           </div>
@@ -39,7 +39,7 @@
 
     <!-- homework data -->
     <template id="homework-column-module">
-          <div class='column-module'>
+          <div class='column-module clickable'>
                   <span class="dot homework-column-dot"></span>
                   <p class='module-text'>Homework Title</p>
                   <p class='homework-description'>Homework Desc</p>
@@ -83,20 +83,17 @@
           <p class="bold">Description </p>
                 <textarea name="name" id="item-description">Description.</textarea>
           <p class="bold">Due Date </p>
-                <input type="date" id="item-date">
+                <input type="date" id="item-date" class="clickable">
 
     </template>
 
     <template id="edit-note">
-
           <div class="inline-container">
               <p class="inline bold">Title </p>
               <input id="item-name" type="text" name="" value="Name of task. ie. Read Tracks." class="mb-20 inline ml-20">
           </div>
-
           <p class="bold">Description </p>
                 <textarea name="name" id="item-description" class="large-text-area">Description.</textarea>
-
     </template>
 
     <template id="edit-note-bottom">
@@ -146,7 +143,7 @@
               </div>
               <h1></h1>
               <div class="settings-container container">
-                    <img src="./images/settings.png" alt="" id="settings-IMG">
+                    <img src="./images/settings.png" alt="" id="settings-IMG" onclick="openSettings()" class="clickable">
               </div>
         </div>
 
@@ -190,19 +187,19 @@
                     <div class="sticky-note-heading clickable" onclick="replaceColumnWithNotes()">
                           <h3>Notes / Reminders <span class="sticky-note-add" id="add-note" onclick="addNote()">+</span></h3>
                     </div>
-                    <div class="sticky-note-row"  onclick="replaceColumnWithItem('notes', 0)">
+                    <div class="sticky-note-row clickable"  onclick="replaceColumnWithItem('notes', 0)">
 
                     </div>
-                    <div class="sticky-note-row"  onclick="replaceColumnWithItem('notes', 1)">
+                    <div class="sticky-note-row clickable"  onclick="replaceColumnWithItem('notes', 1)">
 
                     </div>
-                    <div class="sticky-note-row"  onclick="replaceColumnWithItem('notes', 2)">
+                    <div class="sticky-note-row clickable"  onclick="replaceColumnWithItem('notes', 2)">
 
                     </div>
-                    <div class="sticky-note-row"  onclick="replaceColumnWithItem('notes', 3)">
+                    <div class="sticky-note-row clickable"  onclick="replaceColumnWithItem('notes', 3)">
 
                     </div>
-                    <div class="sticky-note-row"  onclick="replaceColumnWithItem('notes', 4)">
+                    <div class="sticky-note-row clickable"  onclick="replaceColumnWithItem('notes', 4)">
 
                     </div>
               </div>
@@ -211,8 +208,8 @@
 
     <div id="start-page" class="page hide">
             <div class="container">
-              <h1>Welcome to my project</h1>
-              <h3>Add your subjects (subject 1 = Period 1 Monday subject 2 is next subject, etc.)</h3>
+              <h1>Your Subjects</h1>
+              <h3>Enter your subjects - starting P1 Monday.</h3>
             </div>
 
             <div class="container">
@@ -239,9 +236,9 @@
               <label for="">Subject 6 </label>
               <input type="text" name="" value="" class="subject-input" list="subject-list"/>
             </div>
-            <form id="subject-submit" class="" action="index.html" method="post">
-                  <button type="submit" name="button">Submit</button>
-            </form>
+            <div class="large-button white-button">
+                  <p onclick="updateSubjectData()">Apply Changes</p>
+            </div>
 
             <datalist id="subject-list">
 
@@ -273,10 +270,10 @@
                       </div>
                 </div>
                 <div class="question-buttons">
-                      <div class="question-button skip-button">
+                      <div class="question-button skip-button clickable">
                             <p>SKIP</p>
                       </div>
-                      <div class="question-button done-button">
+                      <div class="question-button done-button clickable">
                             <p>DONE</p>
                       </div>
                 </div>

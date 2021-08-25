@@ -137,6 +137,43 @@ function updateHomeworkData(deleteIt) { //add and update
       retrieveData(startUp);
 }
 
+function updateSubjectData() { //add and update
+
+    var data = document.getElementsByClassName("subject-input");
+
+    var validation = validateSubjects(data); //true means validation is passed
+
+    if (validation !== true) { //failed validation (onscreen message through other function)
+            return;
+    }
+
+    var transaction = db.transaction(['subjects_os'], 'readwrite');
+    var objectStore = transaction.objectStore('subjects_os');
+    var request = objectStore.clear();
+
+    for (var i =0; i < data.length; i++) {
+          var newItem = getSubjectFromName(data[i].value);
+
+          newItem.columnModules = [];  //cannot be serialised
+          newItem.updateExerciseData = "" //cannot be serialised
+
+
+          var transaction = db.transaction(['subjects_os'], 'readwrite');
+          var objectStore = transaction.objectStore('subjects_os');
+          var request = objectStore.add(newItem);
+
+          transaction.oncomplete = function() {
+              console.log('Transaction completed: database modification finished.');
+          }
+
+          transaction.onerror = function() { //vague but never had this triggered before
+              console.log('Transaction not opened due to error');
+          };
+    }
+
+    retrieveData(startUp);
+}
+
 window.onload = function() {
 
     //needs seperate request within the onload function to test for upgrades
@@ -172,46 +209,6 @@ window.onload = function() {
 
   if (updateSubjects != null) { //tests if exists - crashes badly if form doesn't exist
       updateSubjects.onsubmit = updateSubjectData;
-  }
-
-
-  function updateSubjectData(e) { //add and update
-
-      e.preventDefault(); //stops page refresh from form
-
-      var data = document.getElementsByClassName("subject-input");
-
-      var validation = validateSubjects(data); //true means validation is passed
-
-      if (validation !== true) { //failed validation (onscreen message through other function)
-              return;
-      }
-
-      var transaction = db.transaction(['subjects_os'], 'readwrite');
-      var objectStore = transaction.objectStore('subjects_os');
-      var request = objectStore.clear();
-
-      for (var i =0; i < data.length; i++) {
-            var newItem = getSubjectFromName(data[i].value);
-
-            newItem.columnModules = [];  //cannot be serialised
-            newItem.updateExerciseData = "" //cannot be serialised
-
-
-            var transaction = db.transaction(['subjects_os'], 'readwrite');
-            var objectStore = transaction.objectStore('subjects_os');
-            var request = objectStore.add(newItem);
-
-            transaction.oncomplete = function() {
-                console.log('Transaction completed: database modification finished.');
-            }
-
-            transaction.onerror = function() { //vague but never had this triggered before
-                console.log('Transaction not opened due to error');
-            };
-      }
-
-      retrieveData(startUp);
   }
 
 };

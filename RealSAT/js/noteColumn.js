@@ -23,7 +23,11 @@ function initialiseNoteData(data) {
                   }
           };
 
-          noteData.notes = data.notes[0].notes; //stores data in array by default as it loops through all keys in object store
+          if (data.notes.length > 0) {
+                  noteData.notes = data.notes[0].notes; //stores data in array by default as it loops through all keys in object store
+          }
+
+
 
           return noteData;
 }

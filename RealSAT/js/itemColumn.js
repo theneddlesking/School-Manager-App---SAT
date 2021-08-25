@@ -98,14 +98,24 @@ function replaceColumnWithItem(itemType, itemIndex) { //could be cleaner with pr
                       deleteText.textContent = "Completed Task";
                       deleteBtn.appendChild(deleteText);
                       deleteBtn.classList.add("green-button");
+                      deleteBtn.classList.add("clickable");
                       deleteBtn.onclick = function() {
                             updateHomeworkData(true);
                       }
                       homeworkColumnTop.appendChild(deleteBtn);
                 }
         } else { //notes
-                if (itemIndex == "add") {
-
+                if (itemIndex != "add") {
+                        var deleteBtn = document.createElement("div");
+                        var deleteText = document.createElement("p");
+                        deleteText.textContent = "Discard Note";
+                        deleteBtn.appendChild(deleteText);
+                        deleteBtn.classList.add("red-button");
+                        deleteBtn.classList.add("clickable");
+                        deleteBtn.onclick = function() {
+                              updateNoteData(true);
+                        }
+                        homeworkColumnTop.appendChild(deleteBtn);
                 }
         }
 

@@ -19,6 +19,16 @@ function loadPage(page) {
         }
 }
 
+function openSettings() {
+      loadPage("start-page");
+      //autofills inputs
+      var subjectInputs = document.getElementsByClassName("subject-input");
+      console.log(mySubjects)
+      for (var i=0; i < subjectInputs.length; i++) {
+              subjectInputs[i].value = mySubjects[i].name;
+      }
+}
+
 function loadMain(page) {
       loadPage("main");
 }
