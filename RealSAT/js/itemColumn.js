@@ -3,6 +3,11 @@ function getHomeworkTask(itemIndex) {
         return data;
 }
 
+function getNote(itemIndex) {
+        var data = noteData.notes[itemIndex];
+        return data;
+}
+
 var emptyHomework = {
     "subject": {},
     "dueDate": "",
@@ -14,6 +19,11 @@ var emptyHomework = {
     "pdfData": {}
 }
 
+var emptyNote = {
+    description : "",
+    title: "",
+}
+
 function loadOptions() {
         var select = document.getElementById("item-subject");
         select.innerHTML = "";
@@ -22,21 +32,26 @@ function loadOptions() {
         }
 }
 
-var g_itemIndex;
+var g_itemIndex; //global for reference in other functions
 
-function replaceColumnWithItem(itemType, itemIndex) {
+function replaceColumnWithItem(itemType, itemIndex) { //could be cleaner with proper abstraction but it's not tooooo bad
         //index the item later
-
-        if (itemType == "homework") {
-
-        }
+        console.log(itemIndex);
 
         if (itemIndex == "add") { //add mode creates a blank version
-          g_itemIndex = "add";
-              var itemData = emptyHomework;
+              g_itemIndex = "add";
+              var itemData = emptyNote;
+              if (itemType == "homework") {
+                      itemData = emptyHomework;
+              }
         } else { //editting a previous homework task
               g_itemIndex = itemIndex;
-              var itemData = getHomeworkTask(itemIndex);
+              var itemData;
+              if (itemType == "homework") {
+                      itemData = getHomeworkTask(itemIndex);
+              } else {
+                      itemData = getNote(itemIndex);
+              }
 
               if (itemData == undefined || itemData == null) { //existence check
                     return;
@@ -48,35 +63,63 @@ function replaceColumnWithItem(itemType, itemIndex) {
         //reset column
 
         document.getElementById("subject-column-dot").style.display = "none";
-        document.getElementById("column-heading").textContent = "Homework";
+        if (itemType == "homework") {
+              document.getElementById("column-heading").textContent = "Homework";
+        } else {
+              document.getElementById("column-heading").textContent = "Notes / Reminders";
+        }
 
         document.getElementById("column-content").innerHTML = `<div class="container" id="column-top"></div>
         <div class="container" id="column-bottom"></div>`;
 
         var homeworkColumnTop = document.getElementById("column-top");
-        var itemElem = document.getElementById("edit-homework").content.cloneNode(true);
+
+        if (itemType == "homework") {
+              var itemElem = document.getElementById("edit-homework").content.cloneNode(true);
+        } else {
+              var itemElem = document.getElementById("edit-note").content.cloneNode(true);
+        }
+
 
         homeworkColumnTop.appendChild(itemElem);
 
-        loadOptions();
+        if (itemType == "homework") {
+                loadOptions(); //fills select with subjects
+                homeworkColumnTop.querySelector("#item-dot").style.backgroundColor = itemData.subject.colour;
+                if (itemIndex == "add") {
+                      homeworkColumnTop.querySelector("#item-subject").value = mySubjects[0].name;
+                      homeworkColumnTop.querySelector("#item-dot").style.backgroundColor = mySubjects[0].colour;
+                      document.getElementById("item-date").valueAsDate = new Date();
+                } else {
+                      homeworkColumnTop.querySelector("#item-subject").value = itemData.subject.name;
+                      document.getElementById("item-date").valueAsDate = itemData.dueDate;
+                      var deleteBtn = document.createElement("div");
+                      var deleteText = document.createElement("p");
+                      deleteText.textContent = "Completed Task";
+                      deleteBtn.appendChild(deleteText);
+                      deleteBtn.classList.add("green-button");
+                      deleteBtn.onclick = function() {
+                            updateHomeworkData(true);
+                      }
+                      homeworkColumnTop.appendChild(deleteBtn);
+                }
+        } else { //notes
+                if (itemIndex == "add") {
+
+                }
+        }
 
         //insert data into column
-
-        homeworkColumnTop.querySelector("#item-dot").style.backgroundColor = itemData.subject.colour;
-
-        if (itemIndex == "add") {
-              homeworkColumnTop.querySelector("#item-subject").value = mySubjects[0].name;
-              homeworkColumnTop.querySelector("#item-dot").style.backgroundColor = mySubjects[0].colour;
-              document.getElementById("item-date").valueAsDate = new Date();
-        } else {
-              homeworkColumnTop.querySelector("#item-subject").value = itemData.subject.name;
-              document.getElementById("item-date").valueAsDate = itemData.dueDate;
-        }
 
         homeworkColumnTop.querySelector("#item-name").value = itemData.title;
         homeworkColumnTop.querySelector("#item-description").value = itemData.description;
 
-        var submitElem = document.getElementById("edit-homework-bottom").content.cloneNode(true);
+        if (itemType == "homework") {
+              var submitElem = document.getElementById("edit-homework-bottom").content.cloneNode(true);
+        } else {
+              var submitElem = document.getElementById("edit-note-bottom").content.cloneNode(true);
+        }
+
         document.getElementById("column-bottom").appendChild(submitElem);
 
 }

@@ -46,19 +46,57 @@ async function retrieveData(fnCallback) {
                   const transaction = db.transaction(["homework_os"]);
                   const objectStore = transaction.objectStore('homework_os');
                   queryObjectStore(objectStore).then(
-                          function(homeworkData) {
-                                data.homework = homeworkData;
-                                fnCallback(data);
+                          function(someHomeworkData) {
+                                data.homework = someHomeworkData;
+                                const transaction = db.transaction(["notes_os"]);
+                                const objectStore = transaction.objectStore('notes_os');
+                                queryObjectStore(objectStore).then(
+                                        function(someNoteData) {
+                                              data.notes = someNoteData;
+                                              fnCallback(data);
+                                        }
+                                );
                           }
                   );
             }
     )
 }
 
+function updateNoteData(deleteIt) { //add and update
+      var validation = validateNotes(deleteIt); //true means passed validation
 
-function updateHomeworkData() { //add and update
+      if (!validation) {
+            return;
+      }
 
-      var validation = validateHomework(); //true means passed validation
+      var transaction = db.transaction(['notes_os'], 'readwrite');
+      var objectStore = transaction.objectStore('notes_os');
+      var request = objectStore.clear();
+
+      var data = {...noteData}; //spread operator makes shallow copy so that current data isn't overwritten
+
+      data.displayNotes= "";
+
+      var newItem = data;
+
+      var transaction = db.transaction(['notes_os'], 'readwrite');
+      var objectStore = transaction.objectStore('notes_os');
+      var request = objectStore.add(newItem);
+
+      transaction.oncomplete = function() {
+          console.log('Transaction completed: database modification finished.');
+
+      }
+
+      transaction.onerror = function() {
+          console.log('Transaction not opened due to error');
+      };
+
+      retrieveData(startUp);
+}
+
+function updateHomeworkData(deleteIt) { //add and update
+      var validation = validateHomework(deleteIt); //true means passed validation
 
       if (!validation) {
             return;
@@ -67,10 +105,6 @@ function updateHomeworkData() { //add and update
       var transaction = db.transaction(['homework_os'], 'readwrite');
       var objectStore = transaction.objectStore('homework_os');
       var request = objectStore.clear();
-
-
-
-
 
       var data = {...homeworkData}; //spread operator makes shallow copy so that current data isn't overwritten
 
@@ -93,6 +127,7 @@ function updateHomeworkData() { //add and update
 
       transaction.oncomplete = function() {
           console.log('Transaction completed: database modification finished.');
+
       }
 
       transaction.onerror = function() {
@@ -128,6 +163,9 @@ window.onload = function() {
 
       var objectStore = db.createObjectStore('homework_os', { keyPath: 'id', autoIncrement:true });
       objectStore.createIndex('homework', 'homework', { unique: false });
+
+      var objectStore = db.createObjectStore('notes_os', { keyPath: 'id', autoIncrement:true });
+      objectStore.createIndex('notes', 'notes', { unique: false });
 
       console.log('Database setup complete');
   };

@@ -134,10 +134,11 @@ function getNextClass(today) {
     }
     else { //you are in class
       nextPeriod = getNextPeriod(today);
-      if (nextPeriod == 0) {
-          return week[day][0];
+      if (nextPeriod == 0 || (day == 2 && nextPeriod == 3)) {//Tuesday period 4 is a spare
+            alert("i found you")
+            return week[day][0];
       } else {
-          return week[day-1][nextPeriod];
+            return week[day-1][nextPeriod];
       }
     }
 }
@@ -160,7 +161,7 @@ function getSchedule(today) {
         }
     }
     if (actualDay.getDate() == currentDay.getDate() && actualDay.getMonth() == currentDay.getMonth()  && actualDay.getFullYear() == currentDay.getFullYear()) {
-        highlightCurrentPeriod(today);
+          highlightCurrentPeriod(today);
     } else {
           unhighlightPeriod("all");
     }
@@ -221,7 +222,3 @@ function changeDay(num) {
       currentDay.setDate(currentDay.getDate()+num);
       getSchedule(currentDay);
 }
-
-
-
-var classRightNow;

@@ -29,6 +29,14 @@
                   <p class='module-text'>Dummy text.</p>
           </div>
     </template>
+    <!-- note data -->
+    <template id="note-column-module">
+          <div class='column-module'>
+                  <p class='module-text'>Note Title</p>
+                  <p class='note-description'>Note Desc</p>
+          </div>
+    </template>
+
     <!-- homework data -->
     <template id="homework-column-module">
           <div class='column-module'>
@@ -79,12 +87,37 @@
 
     </template>
 
+    <template id="edit-note">
+
+          <div class="inline-container">
+              <p class="inline bold">Title </p>
+              <input id="item-name" type="text" name="" value="Name of task. ie. Read Tracks." class="mb-20 inline ml-20">
+          </div>
+
+          <p class="bold">Description </p>
+                <textarea name="name" id="item-description" class="large-text-area">Description.</textarea>
+
+    </template>
+
+    <template id="edit-note-bottom">
+            <div class="container inline-buttons">
+                  <div class="large-button white-button" onclick="updateNoteData()">
+                        <p name="button">Submit</p>
+                  </div>
+
+                  <div class="large-button white-button" onclick="updateColumnWithSubject()">
+                        <p>Cancel</p>
+                  </div>
+            </div>
+    </template>
+
     <template id="edit-homework-bottom">
             <div class="container inline-buttons">
                   <div class="large-button white-button" onclick="updateHomeworkData()">
                         <p name="button">Submit</p>
                   </div>
-                  <div class="large-button white-button">
+
+                  <div class="large-button white-button" onclick="updateColumnWithSubject()">
                         <p>Cancel</p>
                   </div>
             </div>
@@ -99,16 +132,16 @@
                     <a id="right" onclick="changeDay(1)" href="#" class="unselectable">></a>
                   </nav>
                   <div class="subject highlighted-subject" onclick="updateSubjectColumn(0)">
-                      <p class="subject-name">Subject Not Loaded</p>
+                      <p class="subject-name clickable">Subject Not Loaded</p>
                   </div>
                   <div class="subject" onclick="updateSubjectColumn(1)">
-                      <p class="subject-name">Subject Not Loaded</p>
+                      <p class="subject-name clickable">Subject Not Loaded</p>
                   </div>
                   <div class="subject" onclick="updateSubjectColumn(2)">
-                      <p class="subject-name">Subject Not Loaded</p>
+                      <p class="subject-name clickable">Subject Not Loaded</p>
                   </div>
                   <div class="subject" onclick="updateSubjectColumn(3)">
-                      <p class="subject-name">Subject Not Loaded</p>
+                      <p class="subject-name clickable">Subject Not Loaded</p>
                   </div>
               </div>
               <h1></h1>
@@ -134,42 +167,42 @@
 
         <div class="sticky-note-container container flex-container">
               <div class="homework-container sticky-note container" id="homework">
-                    <div class="sticky-note-heading" onclick="replaceColumnWithHomework()">
-                          <h3>Homework <span class="sticky-note-add" id="add-homework" onclick="addHomework()">+</span></h3>
+                    <div class="sticky-note-heading clickable" onclick="replaceColumnWithHomework()">
+                          <h3 id="homework-sticky-note-heading-text">Homework <span class="sticky-note-add" id="add-homework" onclick="addHomework()">+</span></h3>
                     </div>
-                    <div class="sticky-note-row" onclick="replaceColumnWithItem(homework, 0)">
+                    <div class="sticky-note-row clickable" onclick="replaceColumnWithItem('homework', 0)">
 
                     </div>
-                    <div class="sticky-note-row" onclick="replaceColumnWithItem(homework, 1)">
+                    <div class="sticky-note-row clickable" onclick="replaceColumnWithItem('homework', 1)">
 
                     </div>
-                    <div class="sticky-note-row" onclick="replaceColumnWithItem(homework, 2)">
+                    <div class="sticky-note-row clickable" onclick="replaceColumnWithItem('homework', 2)">
 
                     </div>
-                    <div class="sticky-note-row" onclick="replaceColumnWithItem(homework, 3)">
+                    <div class="sticky-note-row clickable" onclick="replaceColumnWithItem('homework', 3)">
 
                     </div>
-                    <div class="sticky-note-row">
+                    <div class="sticky-note-row  clickable" onclick="replaceColumnWithItem('homework', 4)">
 
                     </div>
               </div>
-              <div class="notes-container sticky-note container">
-                    <div class="sticky-note-heading">
-                          <h3>Notes / Reminders <span class="sticky-note-add" id="add-note">+</span></h3>
+              <div class="notes-container sticky-note container" id="notes">
+                    <div class="sticky-note-heading clickable" onclick="replaceColumnWithNotes()">
+                          <h3>Notes / Reminders <span class="sticky-note-add" id="add-note" onclick="addNote()">+</span></h3>
                     </div>
-                    <div class="sticky-note-row">
+                    <div class="sticky-note-row"  onclick="replaceColumnWithItem('notes', 0)">
 
                     </div>
-                    <div class="sticky-note-row">
+                    <div class="sticky-note-row"  onclick="replaceColumnWithItem('notes', 1)">
 
                     </div>
-                    <div class="sticky-note-row">
+                    <div class="sticky-note-row"  onclick="replaceColumnWithItem('notes', 2)">
 
                     </div>
-                    <div class="sticky-note-row">
+                    <div class="sticky-note-row"  onclick="replaceColumnWithItem('notes', 3)">
 
                     </div>
-                    <div class="sticky-note-row">
+                    <div class="sticky-note-row"  onclick="replaceColumnWithItem('notes', 4)">
 
                     </div>
               </div>
@@ -261,5 +294,6 @@
       <script src="./js/db.js" charset="utf-8"></script>
       <script src="./js/start.js" charset="utf-8"></script>
       <script src="./js/subjects.js" charset="utf-8"></script>
+      <script src="./js/noteColumn.js" charset="utf-8"></script>
   </body>
 </html>

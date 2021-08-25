@@ -37,6 +37,7 @@
 .large-button {
       font-weight: bolder;
       display: flex;
+      cursor: pointer;
 }
 
 .large-button p {

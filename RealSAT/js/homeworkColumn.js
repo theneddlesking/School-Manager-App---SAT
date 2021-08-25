@@ -1,5 +1,3 @@
-
-
 class HomeworkTask {
       constructor(subject, dueDate, title, description, isPDFWork) {
             this.subject = subject;
@@ -24,7 +22,6 @@ class HomeworkTask {
       }
 }
 
-
 function initialiseHomeworkData(data) {
         var homeworkData = {
               homework : [],
@@ -36,8 +33,6 @@ function initialiseHomeworkData(data) {
 
                     this.homework.push(homeworkTask);
 
-
-
                     if (this.homeworkBySubject[homeworkTask.subject.name] == undefined) { //may bug later if you change subjects by storing more than 6 subjects but this should be impossible with input control
                           this.homeworkBySubject[homeworkTask.subject.name] = [];
                     }
@@ -46,10 +41,15 @@ function initialiseHomeworkData(data) {
               },
 
               displayHomework : function() {
-                      var homework = this.homework;
-                      for (var i=0; i < homework.length; i++) {
-                              addNewItemToStickyNote(homework[i], i, "homework")
+                      clearStickyNote("homework");
+
+                      if (this.homework.length != 0) {
+                            for (var i=0; i < this.homework.length; i++) {
+                                    addNewItemToStickyNote(this.homework[i], i, "homework");
+                            }
                       }
+
+
               },
 
               removeHomework : function(index) {
@@ -59,14 +59,19 @@ function initialiseHomeworkData(data) {
 
                     var task = this.homework[index];
 
+                    console.log("task")
+                    console.log(task)
+
                     for (var i=0; i < this.homeworkBySubject[task.subject.name].length; i++) {
                             if (this.homeworkBySubject[task.subject.name][i] == task) {
-                                  alert("pog")
+
+                                    this.homeworkBySubject[task.subject.name].splice(i, 1);
                             }
                     }
 
 
                     this.homework.splice(index, 1);
+                    console.log("homework: " + this.homework)
 
               }
         };
@@ -95,7 +100,7 @@ function addHomework() {
 }
 
 function replaceColumnWithHomework() {
-        if (!replaceColumn) {
+        if (!replaceColumn) { //removes double press on add button
               replaceColumn = true;
               return;
         }
@@ -122,7 +127,7 @@ function replaceColumnWithHomework() {
         for (var i=0; i < homeworkData.homework.length; i++) {
                 var homework = homeworkData.homework[i];
                 var title = "";
-                if (homework.hasTitle) {
+                if (homework.hasTitle) { //formats data so that title is always correctly displayed
                       title = homework.title;
                 } else if (homework.hasDescription && homework.description.length <= 20) { //change the length to displaying the title up to 17 chars + ...
                       title = homework.description;
@@ -138,27 +143,26 @@ function replaceColumnWithHomework() {
                       description = homework.title;
                 }
 
-                //length validation? - long titles / descriptions are weird
-
                 //create html
                 var homeworkElem = document.getElementById("homework-column-module").content.cloneNode(true);
-                homeworkElem.id = "homework-to-add";
-                homeworkElem.querySelector(".module-text").textContent = title + " - " + (homework.dueDate + "").substring(0, 15);
-                homeworkElem.querySelector(".column-module").onclick = function() { replaceColumnWithItem("homework", i) };
+                homeworkElem.querySelector(".module-text").textContent = title + " - " + (homework.dueDate + "").substring(0, 10);
 
+                homeworkElem.savedIndex = i;
+                homeworkElem.querySelector(".column-module").setAttribute("onclick", 'replaceColumnWithItem("homework",' + i + ')');
                 homeworkElem.querySelector(".homework-description").textContent = description;
                 homeworkElem.querySelector(".dot").style.display = "block";
                 homeworkElem.querySelector(".dot").style.backgroundColor = homework.subject.colour;
+
 
                 homeworkColumn.appendChild(homeworkElem);
         }
 }
 
 function isDateBeforeToday(date) {
-    return new Date(date.toDateString()) < new Date(new Date().toDateString());
+    return new Date(date.toDateString()) < new Date(new Date().toDateString()); //checks if day submitted is before today
 }
 
-function validateHomework() {
+function validateHomework(deleteIt) {
         //check if inputs are valid and then update data
         var title = document.getElementById("item-name").value;
         var description = document.getElementById("item-description").value;
@@ -166,18 +170,22 @@ function validateHomework() {
         var subject = getSubjectFromName(document.getElementById("item-subject").value);
         var dueDate = new Date(document.getElementById("item-date").value);
 
-        if (subject == undefined || subject == null || subject == "") {
-              alert("Please select a subject.");
-              return false;
+        if (!deleteIt) { //you want to be able to delete any task
+              if (subject == undefined || subject == null || subject == "") {
+                    alert("Please select a subject.");
+                    return false;
+              }
+
+              if (isDateBeforeToday(dueDate)) { //can only set homework to a time in the future
+                    alert("Please select a date in the future.");
+                    return false;
+              }
         }
 
-        if (isDateBeforeToday(dueDate) ) { //can only set homework to a time in the future
-              alert("Please select a date in the future.");
-              return false;
+        homeworkData.removeHomework(g_itemIndex);
+        if (!deleteIt) {
+              homeworkData.addHomework( new HomeworkTask(subject, dueDate, title, description, false) );
         }
-
-        homeworkData.removeHomework( g_itemIndex);
-        homeworkData.addHomework( new HomeworkTask(subject, dueDate, title, description, false) );
 
         return true;
 }

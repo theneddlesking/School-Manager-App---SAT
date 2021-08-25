@@ -30,7 +30,6 @@ const pageHeight = 970;
 const pageWidth = 735;
 
 
-
 //cropColumn(1, firstPageCrop + chapterHeight + exerciseHeight + 0, lineHeight);
 //cropColumn(2, 0, line*3 + medGraph*2 + fraction*1 + fraction*1 + line + hybridFunc + hybridFunc + fraction*2 + hybridFunc + line + fraction + line  + hybridFunc + surd + line*2 + surd + hybridFunc + line*2 + surd + largeGraph + hybridFunc + medLine*2 + line + line*2);
 

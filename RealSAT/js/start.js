@@ -1,5 +1,7 @@
 //MANAGES START UP ON THE PROGRAM
 
+
+
 function startUp(data) { //triggers once data is fetched, otherwise webpage would have no data
         console.log(data);
         mySubjects = data.subjects;
@@ -26,16 +28,22 @@ function startUp(data) { //triggers once data is fetched, otherwise webpage woul
 
         homeworkData.displayHomework();
 
+        console.log(data);
 
+        noteData = initialiseNoteData(data);
 
+        noteData.displayNotes();
 
+        updateColumnWithSubject();
 
-        if (classRightNow == "Weekend" || classRightNow == "After School" || classRightNow == "On Break" || classRightNow == "Before School") {
-                //if not in class then display column with next class data
-                updateSubjectColumn(getNextClass(actualDay), true);
-        } else {
-                //if in class then display column with current class data
-                updateSubjectColumn(classRightNow, true);
-        }
+}
 
+function updateColumnWithSubject() {
+      if (classRightNow == "Weekend" || classRightNow == "After School" || classRightNow == "On Break" || classRightNow == "Before School") {
+              //if not in class then display column with next class data
+              updateSubjectColumn(getNextClass(actualDay), true);
+      } else {
+              //if in class then display column with current class data
+              updateSubjectColumn(classRightNow, true);
+      }
 }
