@@ -33,7 +33,7 @@ function initialiseHomeworkData(data) {
 
                     this.homework.push(homeworkTask);
 
-                    if (this.homeworkBySubject[homeworkTask.subject.name] == undefined) { //may bug later if you change subjects by storing more than 6 subjects but this should be impossible with input control
+                    if (this.homeworkBySubject[homeworkTask.subject.name] == undefined) {
                           this.homeworkBySubject[homeworkTask.subject.name] = [];
                     }
 
@@ -115,14 +115,6 @@ function replaceColumnWithHomework() {
         <div class="container" id="column-bottom"></div>`;
 
         var homeworkColumn = document.getElementById("column-top");
-
-        // var title = document.getElementById("basic-column-module").content.cloneNode(true);
-        // if (homeworkData.homework.length > 0) { //exists
-        //         title.querySelector(".module-text").textContent = "My tasks:";
-        // } else {
-        //         title.querySelector(".module-text").textContent = "You don't have any tasks."; //add option to add one?
-        // }
-        // homeworkColumn.appendChild(title);
 
         for (var i=0; i < homeworkData.homework.length; i++) {
                 var homework = homeworkData.homework[i];

@@ -1,3 +1,3 @@
-Long subject name breaks the column. ie. Visual Communications and Design
+FIX: Long subject name breaks the column. ie. Visual Communications and Design
 
-Schedule doesn't display next class on Tuesday afternoon
+BUG: Schedule doesn't display next class on Tuesday afternoon
