@@ -36,6 +36,8 @@ const pageWidth = 735;
 
 var pdfSrc = "Answers.pdf#toolbar=0&&zoom=100&&page=3";
 
+var exerciseData = cambridge.fetchData("Maths Methods", "Exercise 17D", "Chapter 17");
+
 //
 var questionData = {
       pageNumber : 5,
@@ -66,6 +68,8 @@ var questionData = {
 //zooms the question to fill the box
 const BOX_WIDTH = 750;
 const BOX_HEIGHT = 250;
+
+//not actually magic***
 const MAGIC_FACTOR = 0.82; //as width increases the zoom calculations are less reliable so we reduce the width value to mitigate error
 
 var zoom = Math.max((questionData.width * MAGIC_FACTOR) / BOX_WIDTH, questionData.height / BOX_HEIGHT);
@@ -95,7 +99,7 @@ function makeCrop(left, right, top, bottom, zoom) {
       var pdf = document.getElementById("pdf-iframe");
       pdf.src = questionData.pdfName + ".pdf#toolbar=0&&zoom=" + zoom*100 + "&&page=" + questionData.pageNumber;
       var pdfContainer = document.getElementById("pdf-container");
-      pdf.style.left = 1/zoom * (-1 * left) +"px";
+      pdf.style.left = 1/zoom * (-1 * left) +"px"; //inversely proportional to zoom
       pdf.style.top = zoom * (-1 * top) +"px";
       pdfContainer.style.width = zoom * right +"px";
       pdfContainer.style.height = zoom * bottom +"px";

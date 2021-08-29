@@ -1,37 +1,10 @@
-//BUG: chapter review multiple choice broken ----- simply create new func
-
-//BUG: reviews appear in chapter answers but not chapter questions
-
-//BUG: some chapters missing in question chapters (ie. exercise 1H!!)
-
-//TODO: add code to test for missing elements
-
-//EXCEPTION: confirmed! question numbers can be inline --- see Exercise 16C!
-
-//TODO: add graph, diagrams
-
-//TODO: add multi part multi part question support (ie. i, ii, iii) --- relatively fringe for the most part
-
-//TODO: question and question parts don't hold an answer!! only the line they begin on
-
-//BUG / EXCEPTION: code assumes that a question is guaranteed to be a question if not immediately followed by the same question
-//eg. 1 a = 3 +
-//l2    2 - x +
-//l3    3
-//l4    2 a x = 5 b x = 3
-//Current code returns l2 as qns 2 when l4 is qns 2
-//instead you can loop through until you hit the next number (loop until you hit 3, doesn't account for all cases but much more accurate)
-//will sadly override many true false positives (qns judged as qns accurately but on unjust grounds)
-//potentially could have stages to fall back on true false positives?
-//last stage could be guess?
-
 var cambridge = { //in object so that other textbooks can eventually be added in furture versions
       rawPDFs : [],
 
       pdfs : [],
 
       exception : {
-          catchTarget : "Cambridge Senior Maths", //exception to skip for each page
+          catchTarget : "Cambridge Senior Maths", //exception to skip for each page - counts pages and skips useless data
           catchLength : 5 //length in lines
       },
 
@@ -45,7 +18,8 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                   pdf.push(lines[line]);
               }
 
-              var textbookName = document.getElementById("textbook").value;
+              var textbookName = "Maths Methods";
+              //var textbookName = document.getElementById("textbook").value;
 
               cambridge.rawPDFs.push(cambridge.formatTextbook(pdf, textbookName));
 
@@ -78,8 +52,6 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                 formattedPDF = this.formatChapterPDF(pdf);
                 cambridge.pdfs[textbookName].push(cambridge.getAllChapterQuestions(formattedPDF, pdf));
 
-                console.log(this.fetchData("Math Methods 3&4", "Exercise 1A", "Chapter 1"));
-
             }
             return formattedPDF;
       },
@@ -90,9 +62,12 @@ var cambridge = { //in object so that other textbooks can eventually be added in
           var exerciseContent = [];
           var first = true;
           var catchCount = 0;
+          var chapters = [];
+          var pageNum = 1;
           for (var line =  0; line < pdf.length; line++) {
                 catchCount--;
                 if (pdf[line].includes(this.exception.catchTarget)) {
+                      pageNum++;
                       catchCount = this.exception.catchLength;
                 }
                 if (catchCount > 0 || pdf[line].includes("Answers")) { //"Answers" refers to the side bar strip on each page ----- potentially creates problems with solutions with the word "Answers" in it
@@ -130,7 +105,8 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                               }
                               exercises = [];
                           }
-                          var spaces = 0;
+
+                          var spaces = 0; //some exercise names have a double space but most have single space
                           var exerciseName;
                           var excess = "";
                           for (var char = 0; char < pdf[line].length; char++) {
@@ -149,7 +125,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                           exerciseContent.push(pdf[line]);
                       }
                 } else {
-                    if (pdf[line].includes("Chapter")) {
+                    if (pdf[line].includes("Chapter")) { //don't add line twice
                         //console.log("Chapter found!");
                     } else {
                         if (!first) {
@@ -188,7 +164,8 @@ var cambridge = { //in object so that other textbooks can eventually be added in
 
               //test for tech-free multiple choice and extended response (first of these is always beginning of chapter)
 
-              if (pdf[line].includes("Exercise")) {
+              if (pdf[line].includes("Exercise") || pdf[line].includes("Multiple-choice") || pdf[line].includes("Technology-free") || pdf[line].includes("Extended-response")) {
+                    console.log(pdf[line]);
                     isQns = true;
                     if (first) {
                           first = false;
@@ -210,12 +187,15 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                   linePush = pdf[line].substring(index, pdf[line].length);
               }
               linePush = linePush.replace("Skillsheet", "");
+
               if (!pdf[line].includes("Chapter") && isQns && (!pdf[line].includes(currChapter) || pdf[line].includes("Exercise"))) {
                   if (whileBreak) {
                       exerciseContent.push(linePush);
                   }
               }
         }
+        exercises.push(exerciseContent);
+        console.log(exercises);
         newPDF.push(exercises)
         return newPDF;
       },
@@ -223,38 +203,60 @@ var cambridge = { //in object so that other textbooks can eventually be added in
       formatSolutions : function(pdf) {
             var qnsData = this.getQnsNums(pdf);
 
+            qnsData = this.filterUnreasonableNums(pdf, qnsData);
+
+            if (!pdf[0].includes("Multiple-choice")) { //multiple choice renders differently than all other solutions
+                  qnsData = this.outliersQnsNums(pdf, qnsData);
+            }
+
             //loop through question numbers ---- eliminate impossible qns numbers
             qnsData = this.formatQnsNums(pdf, qnsData);
 
             qnsData = this.formatQnsLetters(pdf, qnsData); //1 a,b,c
 
-            //edge cases: may be extra questions at the end of the pdf / doubled up questions edge cases though unlikely
-            //if this happens something else most likely already went wrong anyways
-
-            //lines can be incorrectly flagged as questions - see top for line eg.
-            //multiple questions inline --- very unlikely - see top
-
-            //validate last questions (good test if to see if it has multiple parts or not)
-
             //get raw answers (doesn't account for inline questions)
             qnsData = this.getRawTextAnswers(pdf, qnsData);
+
+            //estimates line heights to display from pdf
+            qnsData = this.getLineHeights(pdf, qnsData);
 
             return qnsData;
       },
 
       formatQuestions : function(pdf) {
+            //filtering question numbers
             var qnsData = this.getQnsNums(pdf);
-
+            qnsData = this.outliersQnsNums(pdf, qnsData);
             qnsData = this.formatQnsNums(pdf, qnsData);
 
+            //getting parts of a question ie. 1 a, b, c
             qnsData = this.formatQnsLetters(pdf, qnsData);
 
-            //get raw text for inline multipart formatQuestions
-
+            //grabs the raw text as well - not necessary as changed to display straight from PDF
             qnsData = this.getRawTextMultiQns(pdf, qnsData);
 
-            return qnsData;
+            //estimates line heights to display from PDF
+            qnsData = this.getLineHeights(pdf, qnsData);
 
+            return qnsData;
+      },
+
+      getLineHeights : function(pdf, qnsData) {
+              for (var i=0; i < qnsData.length; i++) {
+                      if (i+1 != qnsData.length && Math.abs(qnsData[i+1].lineNumber - qnsData[i].lineEnd) <= 1) { //height is likely accurate
+                            qnsData[i].height = qnsData[i].lineEnd - qnsData[i].lineNumber + 1;
+                            if (qnsData[i].lineNumber == 0) {
+                                  qnsData[i].height--; //lineNumber is set to 0 for first question instead of 1
+                            }
+                            if (qnsData[i].parts.length == 1) {
+                                  qnsData[i].height++; //fixes error trimming line / single part question requires an extra line than expected
+                            }
+                      } else if (i+1 != qnsData.length) {
+                              qnsData[i].height = qnsData[i+1].lineEnd - qnsData[i].lineEnd;
+                      }
+
+              }
+              return qnsData;
       },
 
       simpleEqCheck : function(nextLine) { //test if letter is part of equation
@@ -282,25 +284,54 @@ var cambridge = { //in object so that other textbooks can eventually be added in
             var qnsData = [];
             for (var i=1; i < pdf.length; i++) {
                   var line = pdf[i];
-                  if (!isNaN(line[0])) { //questions all begin with first char of number
-                        if (!isNaN(line[1]) && (line[2] == " " || line.length == 3)) { //double digit number
-                              var qnsNum = new Qns(line, i, parseInt(line[0] + line[1]));
+
+                  if (!isNaN(line[0]) || (line[0] == " " && !isNan(line[1]) )) { //questions all begin with first char of number
+
+                        var standardNum = 0;
+                        if (line[0] == " ") {
+                              standardNum = 1; //sometimes question number has space before so shift everything one character
+                        }
+
+                        if (!isNaN(line[standardNum + 1]) && (line[standardNum + 2] == " " || line.length == (standardNum + 3))) { //double digit number
+                              var qnsNum = new Qns(line, i, parseInt(line[standardNum + 0] + line[standardNum + 1]));
                               qnsData.push(qnsNum);
-                        } else if (line[1] == " "  || line.length == 2) { //single digit
-                              var qnsNum = new Qns(line, i, parseInt(line[0]));
+                        } else if (line[standardNum + 1] == " "  || line.length == (standardNum + 2)) { //single digit
+                              var qnsNum = new Qns(line, i, parseInt(line[standardNum + 0]));
                               qnsData.push(qnsNum);
                         }
                   }
             }
+
+
             return qnsData;
+      },
+
+      filterUnreasonableNums : function(pdf, qnsData) { //filters question numbers way beyond reason to decrease length to search for outliers
+              var breakpoint = 30; //30 lines per question seems reasonable
+              var returnData = [];
+              if (qnsData < 20) { //data is of reasonable length alread
+                    return qnsData;
+              }
+              for (var i=0; i < qnsData.length; i++) {
+                      if (qnsData[i].lineNumber < qnsData[i].questionNumber * breakpoint) {
+                              returnData.push(qnsData[i])
+                      }
+              }
+              return returnData;
       },
 
       formatQnsNums : function(pdf, qnsData) {
           var returnData = [];
+
           var expected = 1;
           for (var i=0; i < qnsData.length; i++) {
-              if (i==0 && qnsData[0].questionNumber != 1) { //first question
-                  var newQns = new Qns(pdf[0], 0, 1);
+              if (i==0 && qnsData[0].questionNumber == 1) { //first question
+                  var whileBreak = false;
+                  var lineNum = 1;
+                  if (!pdf[1].includes("1")) {
+                        lineNum = 2;
+                  }
+                  var newQns = new Qns(pdf[lineNum], 0, 1);
                   returnData.push(newQns);
                   expected++;
               } else { //every other question (don't know where it is)
@@ -316,6 +347,126 @@ var cambridge = { //in object so that other textbooks can eventually be added in
               }
           }
           return returnData;
+      },
+
+      addMissingQuestionToData : function(prevQns, qnsData, newQuestion) {
+                var returnData = [];
+                for (var i=0; i < qnsData.length; i++) {
+
+                        if (qnsData[i].questionNumber > newQuestion.questionNumber) {
+                                returnData.push(newQuestion);
+                        }
+                        returnData.push(qnsData[i]);
+
+                }
+                return returnData;
+      },
+
+      findMissingQuestions : function(pdf, qnsData, questionsToFind) {
+
+              for (var i=0; i < questionsToFind.length; i++) {
+                      var found = false;
+                      var newQuestion;
+                      if (questionsToFind[0].prevQns == undefined || questionsToFind[0].nextQns == undefined) {
+                            return false; //failed
+                      }
+                      for (var j=questionsToFind[i].prevQns.lineNumber; j < questionsToFind[i].nextQns.lineNumber; j++) {
+                              if (questionsToFind[i].prevQns == undefined || questionsToFind[i].nextQns == undefined) {
+                                    return false; //failed
+                              }
+
+                              if (pdf[j].includes(questionsToFind[i].qnsNumber)) {
+                                    newQuestion = new Qns(pdf[j], j, questionsToFind[i].qnsNumber);
+                                    found = true;
+                                    break;
+                              }
+                      }
+                      if (found) {
+                            qnsData = this.addMissingQuestionToData(questionsToFind[i].prevQns, qnsData, newQuestion);
+                            continue;
+                      }
+                      for (var j=questionsToFind[i].prevQns.lineNumber; j < questionsToFind[i].prevQns.lineNumber+50; j++) {
+                              if (pdf[j] == undefined) {
+                                    break;
+                              }
+                              if (pdf[j].includes(questionsToFind[i].qnsNumber)) {
+                                    newQuestion = new Qns(pdf[j], j, questionsToFind[i].qnsNumber);
+                                    found = true;
+                                    break;
+                              }
+                      }
+                      if (found) {
+                            qnsData = this.addMissingQuestionToData(questionsToFind[i].prevQns, qnsData, newQuestion);
+                      } else {
+                            newQuestion = new Qns("No solution.", j, questionsToFind[i].qnsNumber)
+                            qnsData = this.addMissingQuestionToData(questionsToFind[i].prevQns, qnsData, newQuestion);
+                      }
+              }
+              return qnsData;
+      },
+
+      outliersQnsNums : function(pdf, qnsData) { //test to see if a question was incorrectly skipped
+              if (qnsData.length > 20) { //too inaccuate with large amount of questions
+                      return qnsData;
+              }
+              var returnData = [];
+              var expected = 1;
+              var correct = 0;
+              var allQnsNumbers = [];
+
+              for (var i=0; i < qnsData.length; i++) {
+                        if (!isNaN(qnsData[i].questionNumber)) {
+                                allQnsNumbers[qnsData[i].questionNumber] = qnsData[i];
+                        }
+              }
+
+              var empties = -1; //FIRST INDEX IS ALWAYS EMPTY
+              var lastQuestion = 0;
+              for (var i=0; i < Math.min(allQnsNumbers.length, 20); i++) {
+                      if (allQnsNumbers[i] == undefined) {
+                            empties++;
+                      } else {
+                            lastQuestion = i;
+                      }
+              }
+
+
+              if (empties < 5 && empties > 0) { //if there are few empty cells then its likely it simply missed a few questions
+
+                    var questionsToFind = []; //stores questions to find with its previous and next question as guidance for where to look
+                    var prevQns = 0; //question before missing question
+                    var nextQns; //question after missing question
+                    for (var i=1; i < lastQuestion; i++) {
+                            if (allQnsNumbers[i] == undefined) {
+                                  var question = {
+                                        qnsNumber : i,
+                                        prevQns : prevQns,
+                                        nextQns : undefined
+                                  }
+                                  questionsToFind.push(question);
+                            } else {
+                                  prevQns = allQnsNumbers[i];
+                            }
+                            for (var j=0; j < questionsToFind.length; j++) {
+                                    if (questionsToFind[j].nextQns == undefined) {
+                                            if (prevQns.questionNumber > questionsToFind[j].prevQns.questionNumber) {
+                                                    questionsToFind[j].nextQns = prevQns; //once question changes then that must be the next question
+                                            }
+                                    }
+                            }
+                    }
+
+                    if (questionsToFind.length > 0 && questionsToFind[questionsToFind.length-1].nextQns == undefined) { //if still undefined then must be the last question
+                            questionsToFind[questionsToFind.length-1].nextQns = allQnsNumbers[lastQuestion];
+                    }
+
+                    returnData = this.findMissingQuestions(pdf, qnsData, questionsToFind) || qnsData;
+
+              } else {  //no outliers
+                    return qnsData;
+              }
+
+              return returnData;
       },
 
       formatQnsLetters : function(pdf, qnsData) {
@@ -372,13 +523,13 @@ var cambridge = { //in object so that other textbooks can eventually be added in
           return returnData;
       },
 
-      getRawTextMultiQns : function(pdf, qnsData) {
-          console.log(qnsData);
+      getRawTextMultiQns : function(pdf, qnsData) { //function isn't neccessary as grabbing heights from individual question works well instead
+          //keeping it for concept for later though - ideas applicable elsewhere
           var returnData = [];
           for (var i=0; i < qnsData.length; i++) {
                 var newData = "";
                 var qns = qnsData[i];
-                for (var j=0; j < qns.parts.length; j++) { //misses the last range but that one is funky anyways
+                for (var j=0; j < qns.parts.length; j++) { //misses the last range purposefully
                         var part = qns.parts[j];
                         var lineStart = part.lineNumber;
 
@@ -398,11 +549,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                                     if (k == lineStart) { //if part b reached on inital line
                                             var splitIt = line.split(nextLetter);
 
-
-                                            //console.log(splitIt);
-                                            //console.log(part.questionLetter);
-
-                                            //didn't I figure out a better way to do this without split?
+                                            //this function turned out to be unnecessary but concept is useful to keep
 
                                     }
                               }
@@ -450,7 +597,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                             name : pdf[i][j][0],
                             questions : []
                       }
-                      exerciseObj.questions = this.formatQuestions(pdf[i][j])
+                      exerciseObj.questions = this.formatQuestions(pdf[i][j]);
                       chapterObj.exercises.push(exerciseObj);
                 }
             }
@@ -462,11 +609,14 @@ var cambridge = { //in object so that other textbooks can eventually be added in
             var myChapter = undefined;
             var solutions = undefined;
 
+            if (this.pdfs[textbookName] == undefined) {
+                  return;
+            }
+
             for (var i=0; i < this.pdfs[textbookName].length; i++) {
                   if (this.pdfs[textbookName][i].chapter.substring(0, chapter.length) == chapter) {
                         myChapter = this.pdfs[textbookName][i].chapter;
                         var chIndex = i;
-                        console.log(chIndex);
                         break;
                   }
             }
