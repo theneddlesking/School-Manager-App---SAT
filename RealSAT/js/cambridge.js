@@ -18,10 +18,11 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                   pdf.push(lines[line]);
               }
 
-              var textbookName = "Maths Methods";
-              //var textbookName = document.getElementById("textbook").value;
+              var textbookName = currentSubjectData.name;
 
               cambridge.rawPDFs.push(cambridge.formatTextbook(pdf, textbookName));
+
+              updatePDFData(cambridge.pdfs);
 
           };
           reader.readAsText(file);
@@ -44,7 +45,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                 cambridge.pdfs[textbookName].push(cambridge.getAllTextbookSolutions(formattedPDF));
             } else {
                 for (var i=0; i < cambridge.pdfs[textbookName].length; i++) {
-                      if (cambridge.pdfs[textbookName][i].chapter == pdf[0]) {
+                      if (cambridge.pdfs[textbookName][i].chapter == pdf[0].substring(0, pdf[0].length-1)) {
                           console.log(pdf[0] + " PDF already loaded for this subject.");
                           return;
                       }
@@ -646,14 +647,26 @@ var cambridge = { //in object so that other textbooks can eventually be added in
             var pageNumbers = formattedPDF.pageNumbers;
 
             var chapterObj = {
-                  chapter : rawPDF[0],
+                  chapter : rawPDF[0].substring(0, rawPDF[0].length-1),
+                  select : rawPDF[0].substring(8, rawPDF[0].length),
                   exercises: []
             }
+
             for (var i=0; i < pdf.length; i++) {
                 for (var j=0; j < pdf[i].length; j++) {
                       var exerciseObj = {
-                            name : pdf[i][j][0],
+                            name : pdf[i][j][0].substring(0, pdf[i][j][0].length -1),
+                            select : pdf[i][j][0].substring(9, pdf[i][j][0].length -1), //value to show on custom select
                             questions : []
+                      }
+                      if (exerciseObj.name.includes("Multiple")) { //multiple choice
+                            exerciseObj.select = "MC";
+                      }
+                      if (exerciseObj.name.includes("Tech")) { //tech free
+                            exerciseObj.select = "TF";
+                      }
+                      if (exerciseObj.name.includes("Extend")) { //extended response
+                            exerciseObj.select = "ER";
                       }
                       exerciseObj.questions = this.formatQuestions(pdf[i][j], pageNumbers[j]);
                       chapterObj.exercises.push(exerciseObj);
@@ -666,6 +679,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
             var myExercise = undefined;
             var myChapter = undefined;
             var solutions = undefined;
+
 
             if (this.pdfs[textbookName] == undefined) {
                   return;
@@ -684,10 +698,10 @@ var cambridge = { //in object so that other textbooks can eventually be added in
             }
 
             for (var j=0; j < this.pdfs[textbookName].length; j++) {
-                    if (this.pdfs[textbookName][j].chapter.includes(chapter)) {
-                          var chIndex = parseInt(chapter)-1;
+                    if (this.pdfs[textbookName][j].chapter == chapter) {
+                          var chIndex = parseInt(chapter.substring(8, chapter.length))-1;
                           for (var i=0; i < this.pdfs[textbookName][j].exercises.length; i++) {
-                                if (this.pdfs[textbookName][j].exercises[i].name.includes(exercise)) {
+                                if (this.pdfs[textbookName][j].exercises[i].name == exercise) {
                                       var exIndex = i;
                                       myExercise = this.pdfs[textbookName][j].exercises[i].name;
 
@@ -704,7 +718,8 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                   return;
             }
             for (var i=0; i < this.pdfs[textbookName].length; i++) {
-                  if (this.pdfs[textbookName][i].chapter.substring(0, 7) == "Answers") {
+                  if (this.pdfs[textbookName][i].chapter == "Answers") {
+                        console.log(chIndex);
                         solutions = this.pdfs[textbookName][i].chapters[chIndex].exercises[exIndex].questions;
                         break;
                   }

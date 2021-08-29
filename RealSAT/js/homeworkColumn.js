@@ -145,6 +145,7 @@ function replaceColumnWithHomework() {
                 homeworkElem.querySelector(".dot").style.display = "block";
                 homeworkElem.querySelector(".dot").style.backgroundColor = homework.subject.colour;
 
+                
 
                 homeworkColumn.appendChild(homeworkElem);
         }
@@ -154,7 +155,11 @@ function isDateBeforeToday(date) {
     return new Date(date.toDateString()) < new Date(new Date().toDateString()); //checks if day submitted is before today
 }
 
-function validateHomework(deleteIt) {
+function validateHomework(deleteIt, pdfHomework) {
+        if (pdfHomework) { //cannot and don't need to validate dynamic homework
+              return true;
+        }
+
         //check if inputs are valid and then update data
         var title = document.getElementById("item-name").value;
         var description = document.getElementById("item-description").value;

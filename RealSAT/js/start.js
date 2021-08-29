@@ -1,7 +1,5 @@
 //MANAGES START UP ON THE PROGRAM
 
-
-
 function startUp(data) { //triggers once data is fetched, otherwise webpage would have no data
         console.log(data);
         mySubjects = data.subjects;
@@ -9,32 +7,35 @@ function startUp(data) { //triggers once data is fetched, otherwise webpage woul
         addSubjectMethods(data.subjects)
 
         if (data.subjects.length > 0) {
-                loadPage("main");
+                loadPage("main"); //loads normally
         } else {
-                loadPage("start-page");
-                return;
+                loadPage("start-page"); //if there are no subjects then we need user to input their subjects
+                return; //exits to avoid reset of start up
         }
 
-        addModulesToSubject(mySubjects[0], ["Begin Exercise", "Input Questions", "Exercise Box"]);
-        addModulesToSubject(mySubjects[1], ["Begin Exercise", "Input Questions", "Exercise Box"]);
-
-        mySubjects[1].exerciseName = "7A";
+        for (var i=0; i < mySubjects.length; i++) {
+                addModulesToSubject(mySubjects[i], ["Begin Exercise", "Input Questions", "Exercise Box", "Upload PDF"]);
+        }
 
         receiveTimetableData();
 
         classRightNow = getSubjectRightNow(actualDay);
 
-        homeworkData = initialiseHomeworkData(data);
+        homeworkData = initialiseHomeworkData(data); //resets the unserialisable data
 
         homeworkData.displayHomework();
 
-        console.log(data);
-
-        noteData = initialiseNoteData(data);
+        noteData = initialiseNoteData(data); //resets the unserialisable data
 
         noteData.displayNotes();
 
-        updateColumnWithSubject();
+        if (data.pdfs[0] == undefined) {
+              cambridge.pdfs = [];
+        } else {
+              cambridge.pdfs = data.pdfs[0];
+        }
+
+        updateColumnWithSubject(); //fills side column with the next subject you have or your current subject
 
 }
 

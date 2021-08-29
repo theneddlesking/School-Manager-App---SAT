@@ -53,13 +53,40 @@ async function retrieveData(fnCallback) {
                                 queryObjectStore(objectStore).then(
                                         function(someNoteData) {
                                               data.notes = someNoteData;
-                                              fnCallback(data);
+                                              const transaction = db.transaction(["pdf_os"]);
+                                              const objectStore = transaction.objectStore('pdf_os');
+                                              queryObjectStore(objectStore).then(
+                                                      function(somePDFData) {
+                                                            data.pdfs = somePDFData;
+                                                            fnCallback(data);
+                                                      }
+                                              );
                                         }
                                 );
                           }
                   );
             }
     )
+}
+
+function updatePDFData(data) {
+      var transaction = db.transaction(['pdf_os'], 'readwrite');
+      var objectStore = transaction.objectStore('pdf_os');
+      var request = objectStore.clear();
+
+      var transaction = db.transaction(['pdf_os'], 'readwrite');
+      var objectStore = transaction.objectStore('pdf_os');
+      var request = objectStore.add(data);
+
+      transaction.oncomplete = function() {
+          console.log('Transaction completed: database modification finished.');
+      }
+
+      transaction.onerror = function() {
+          console.log('Transaction not opened due to error');
+      };
+
+      retrieveData(startUp);
 }
 
 function updateNoteData(deleteIt) { //add and update
@@ -95,18 +122,17 @@ function updateNoteData(deleteIt) { //add and update
       retrieveData(startUp);
 }
 
-function updateHomeworkData(deleteIt) { //add and update
-      var validation = validateHomework(deleteIt); //true means passed validation
+function updateHomeworkData(deleteIt, pdfHomework) { //add and update
+      var validation = validateHomework(deleteIt, pdfHomework); //true means passed validation
 
-      if (!validation) {
+      var data = {...homeworkData}; //spread operator makes shallow copy so that current data isn't overwritten
+      if (!validation && !pdfHomework) {
             return;
-      }
+      } 
 
       var transaction = db.transaction(['homework_os'], 'readwrite');
       var objectStore = transaction.objectStore('homework_os');
       var request = objectStore.clear();
-
-      var data = {...homeworkData}; //spread operator makes shallow copy so that current data isn't overwritten
 
       for (var i=0; i < data.homework.length; i++) {
               data.homework[i].subject.columnModules = []; //cannot be serialised
@@ -203,6 +229,9 @@ window.onload = function() {
 
       var objectStore = db.createObjectStore('notes_os', { keyPath: 'id', autoIncrement:true });
       objectStore.createIndex('notes', 'notes', { unique: false });
+
+      var objectStore = db.createObjectStore('pdf_os', { keyPath: 'id', autoIncrement:true });
+      objectStore.createIndex('pdf', 'pdf', { unique: false });
 
       console.log('Database setup complete');
   };

@@ -11,8 +11,12 @@ select {
       font-size: 0.65em;
 }
 
+input[type="file"] {
+      padding: 10px;
+}
+
 .large-text-area {
-        height: 100px;  
+        height: 100px;
 }
 
 .small-font {

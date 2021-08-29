@@ -115,8 +115,22 @@ function replaceColumnWithItem(itemType, itemIndex) { //could be cleaner with pr
                         deleteBtn.onclick = function() {
                               updateNoteData(true);
                         }
+                        console.log(homework.isPDFWork);
+
+
                         homeworkColumnTop.appendChild(deleteBtn);
                 }
+        }
+
+        if (itemData.isPDFWork) {
+                var startWorkBtn = document.createElement("button");
+                startWorkBtn.textContent = "Start";
+                startWorkBtn.onclick = function() {
+                        currentSubjectData = itemData.subject;
+                        console.log(currentSubjectData)
+                        beginExercise(false, itemData.description);
+                }
+                homeworkColumnTop.appendChild(startWorkBtn);
         }
 
         //insert data into column

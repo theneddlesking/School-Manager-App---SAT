@@ -4,9 +4,8 @@ class Subject {
             this.name = name;
             this.colour = colour;
             this.columnModules = [addModuleToSubject("Upload PDF")];
-            this.exerciseName = "16E";
-            this.exerciseQuestions = [];
-            this.exerciseQuestionsText = "1all, 2all, 3all";
+            this.exerciseName = "1A";
+            this.chapter = "1";
             this.subjectIndex = subjectIndex;
             subjectIndex++;
       }

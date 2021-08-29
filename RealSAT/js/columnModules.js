@@ -42,38 +42,45 @@ var ColumnModules = {
 
 
 function getAvailableExercises() {
-      return [{
-            name : "16A"
-      },
-      {
-            name : "16B"
-      },
-      {
-            name : "16C"
-      },
-      {
-            name : "16D"
-      },
-      {
-            name : "16E"
-      },
-      {
-            name : "16F"
-      },
-      {
-            name : "16G"
-      },
-      ];
+        for (var i=0; i < cambridge.pdfs[currentSubjectData.name].length; i++) {
+                if (cambridge.pdfs[currentSubjectData.name][i].chapter == "Chapter " + currentSubjectData.chapter) {
+                        return cambridge.pdfs[currentSubjectData.name][i].exercises;
+                }
+        }
+}
+
+function getAvailableChapters() {
+      return cambridge.pdfs[currentSubjectData.name];
 }
 
 //selecting stops multipress
 var selecting = false;
 
-function exerciseSelect() {
-        selecting = true;
+function chapterSelect() {
+      selecting = true;
+      var selectOptions = getAvailableChapters(); //replace with actual later
+      console.log(selectOptions);
+
+      var container = document.getElementById("exercise-container");
+      container.innerHTML = "";
+      document.getElementById("input-questions").style.display = "none";
+      container.style.display = "grid";
+      for (var i=0; i < selectOptions.length; i++) {
+              if (selectOptions[i].chapter != "Answers") {
+                    var exerciseBox = document.getElementById("temp-chapter-box").content.cloneNode(true);
+                    exerciseBox.getElementById("chapter-box-name").textContent = selectOptions[i].select;
+                    container.appendChild(exerciseBox);
+              }
+      }
+}
+
+function exerciseSelect(chapterElem) {
+
+        currentSubjectData.chapter = parseInt(chapterElem.textContent);
         Debugger.log("Select exercise");
 
         var selectOptions = getAvailableExercises(); //replace with actual later
+        console.log(selectOptions);
 
         var container = document.getElementById("exercise-container");
         container.innerHTML = "";
@@ -81,7 +88,7 @@ function exerciseSelect() {
         container.style.display = "grid";
         for (var i=0; i < selectOptions.length; i++) {
                 var exerciseBox = document.getElementById("temp-exercise-box").content.cloneNode(true);
-                exerciseBox.getElementById("exercise-box-name").textContent = selectOptions[i].name;
+                exerciseBox.getElementById("exercise-box-name").textContent = selectOptions[i].select;
                 container.appendChild(exerciseBox);
         }
 

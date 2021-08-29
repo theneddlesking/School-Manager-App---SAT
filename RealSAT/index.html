@@ -12,6 +12,13 @@
   </head>
   <body>
     <!-- TEMPLATES -->
+    <template id="temp-chapter-box">
+          <div class="exercise-box" onclick="exerciseSelect(this)">
+                <p id="chapter-box-name">Exercise Name</p>
+          </div>
+    </template>
+
+
     <template id="temp-exercise-box">
           <div class="exercise-box" onclick="selectExercise(this)">
                 <p id="exercise-box-name">Exercise Name</p>
@@ -46,10 +53,9 @@
           </div>
     </template>
     <template id="upload-pdf-module">
-        <div class='column-module module-clickable' onclick='uploadPDF()'>
-                <p class='module-text'>Upload PDF
-                <span class='arrow-click'>></span>
-                </p>
+        <div class='column-module' onclick='uploadPDF()'>
+                <p class='module-text'>Upload PDFs</p>
+                <input type="file" name="" value="" onchange="cambridge.pdfFromFile(this)">
         </div>
     </template>
     <template id="input-questions-module">
@@ -59,8 +65,8 @@
         </div>
     </template>
     <template id="begin-exercise-module">
-        <div id='begin-exercise' class='column-module module-clickable' onclick='beginExercise()'>
-                <p class='module-text'>Begin exercise<span id='begin-exercise-name' onclick='exerciseSelect()'>Exercise Name</span> <span class='arrow-click'>></span> </p>
+        <div id='begin-exercise' class='column-module module-clickable clickable' onclick='beginExercise(true)'>
+                <p class='module-text'>Begin exercise<span id='begin-exercise-name' onclick='chapterSelect()'>Exercise Name</span> <span class='arrow-click'>></span> </p>
         </div>
     </template>
 
@@ -110,7 +116,7 @@
 
     <template id="edit-homework-bottom">
             <div class="container inline-buttons">
-                  <div class="large-button white-button" onclick="updateHomeworkData()">
+                  <div class="large-button white-button" onclick="updateHomeworkData(false, false)">
                         <p name="button">Submit</p>
                   </div>
 
@@ -204,12 +210,11 @@
                     </div>
               </div>
         </div>
-        <input type="file" name="" value="" onchange="cambridge.pdfFromFile(this)">
     </div>
 
     <div id="start-page" class="page hide">
             <div class="container">
-              <h1>Your Subjects</h1>
+              <h1>Before we begin...</h1>
               <h3>Enter your subjects - starting P1 Monday.</h3>
             </div>
 
@@ -262,20 +267,28 @@
                 </div>
           </div>
           <div class="questions-container">
-                <div class="prev-question large-button white-button">
+                <div class="prev-question large-button white-button" onclick="changeQuestion(-1)">
                       <p> < </p>
                 </div>
-                <div class="current-question">
-                      <div id="pdf-container">
-                          <!-- <iframe id="pdf-iframe" width="1200px" height="1300px"></iframe> -->
-                      </div>
+
+                <div class="current-question" id="current-question">
+                    <div id="pdf-container">
+                        <!-- RENDERED DYNAMICAL TO RESET SCROLL -->
+                        <!-- <iframe id="pdf-iframe" width="1200px" height="1300px"></iframe> -->
+                    </div>
                 </div>
                 <div class="question-buttons">
-                      <div class="question-button skip-button clickable" onclick="displayNextQuestion()">
+                      <div class="question-button skip-button clickable" onclick="changeQuestion(1)">
                             <p>SKIP</p>
                       </div>
-                      <div class="question-button done-button clickable">
+                      <div class="question-button done-button clickable" onclick="completedQuestion()">
                             <p>DONE</p>
+                      </div>
+                      <div class="question-button save-button clickable" onclick="addQuestionsToHomework()">
+                            <p>SAVE</p>
+                      </div>
+                      <div class="question-button answer-button clickable" onclick="toggleAnswer()">
+                            <p>ANSWER</p>
                       </div>
                 </div>
           </div>
