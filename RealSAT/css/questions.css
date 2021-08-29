@@ -81,8 +81,8 @@
 }
 
 .current-question {
-      background-color: white;
+      background-color: black;
       width: 750px;
-      height: 250px;
+      height: 400px;
       overflow: hidden;
 }

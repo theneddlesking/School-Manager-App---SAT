@@ -87,14 +87,6 @@ function exerciseSelect() {
 
 }
 
-function beginExercise() {
-      if (!selecting) {
-            Debugger.log("Begin exercise");
-            loadPage("questions-page");
-      } else {
-            selecting = false;
-      }
-}
 
 function selectExercise(element) {
         currentSubjectData.exerciseName = element.childNodes[1].textContent;

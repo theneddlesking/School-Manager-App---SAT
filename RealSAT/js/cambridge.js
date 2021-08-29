@@ -63,19 +63,25 @@ var cambridge = { //in object so that other textbooks can eventually be added in
           var first = true;
           var catchCount = 0;
           var chapters = [];
-          var pageNum = 1;
+          var chapterPageNumbers = [];
+          var pageNumbers = [];
+          var pageNumber = 1;
           for (var line =  0; line < pdf.length; line++) {
-                catchCount--;
+                // catchCount--;
                 if (pdf[line].includes(this.exception.catchTarget)) {
-                      pageNum++;
+                      pageNumber++;
                       catchCount = this.exception.catchLength;
                 }
-                if (catchCount > 0 || pdf[line].includes("Answers")) { //"Answers" refers to the side bar strip on each page ----- potentially creates problems with solutions with the word "Answers" in it
+                // if (catchCount > 0) {
+                //       continue;
+                // }
+                if (pdf[line].includes("Answers")) { //"Answers" refers to the side bar strip on each page ----- potentially creates problems with solutions with the word "Answers" in it
                       //console.log("SKIPPED LINE: " + pdf[line]);
                       continue;
                 }
 
                 if (pdf[line].includes("Exercise") || pdf[line].includes("Technology-free questions") || pdf[line].includes("Multiple-choice questions") || pdf[line].includes("Extended-response questions")) {
+                      pageNumbers.push(pageNumber);
                       if (first) {
                           exerciseContent.push(pdf[line]);
                           first = false;
@@ -83,7 +89,9 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                           exercises.push(exerciseContent);
                           exerciseContent = [];
                           if (pdf[line-1].includes("Chapter")) {
+
                               if (exercises[0][0].substring(0, 15) == "Technology-free") { //add chapter reviews inside previous exercise
+
                                     if (newPDF[newPDF.length-1][newPDF[newPDF.length-1].length-1][0].substring(0, 17) == "Extended-response") {
                                           //stand alone chapter review
 
@@ -93,17 +101,24 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                                                 reviewChapter.push(exercises[i]);
                                           }
                                           newPDF.push(reviewChapter);
+                                          chapterPageNumbers.push(pageNumbers);
+
                                     } else {
                                         //chapter review with previous exercises
 
                                         for (var i=0; i < exercises.length; i++) { //3 parts of chapter review
                                               newPDF[newPDF.length-1].push(exercises[i]);
+                                              chapterPageNumbers[chapterPageNumbers.length-1].push(pageNumbers[i]);
                                         }
+
                                     }
                               } else {
                                     newPDF.push(exercises);
+                                    chapterPageNumbers.push(pageNumbers);
                               }
+                              pageNumbers = [];
                               exercises = [];
+
                           }
 
                           var spaces = 0; //some exercise names have a double space but most have single space
@@ -135,7 +150,13 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                 }
           }
           newPDF.push(exercises);
-          return newPDF;
+          chapterPageNumbers.push(pageNumbers);
+          var returnData = {
+                  pdfData : newPDF,
+                  pageNumbers : chapterPageNumbers
+          }
+
+          return returnData;
       },
 
       formatChapterPDF : function(pdf) {
@@ -147,14 +168,17 @@ var cambridge = { //in object so that other textbooks can eventually be added in
         var nextChapter = pdf[0].substring(8, pdf[0].length-1) + "B";
         var catchCount = 0;
         var first = true;
+        var pageNumber = 1;
+        var pageNumbers = [];
         for (var line = 0; line < pdf.length; line++) {
-              catchCount--;
+              // catchCount--;
               if (pdf[line].includes(this.exception.catchTarget)) {
                     catchCount = this.exception.catchLength;
+                    pageNumber++;
               }
-              if (catchCount > 0) {
-                    continue;
-              }
+              // if (catchCount > 0) {
+              //       continue;
+              // }
               if (pdf[line].substring(0, 2) == nextChapter) {
                     isQns = false;
                     currChapter = nextChapter;
@@ -165,11 +189,12 @@ var cambridge = { //in object so that other textbooks can eventually be added in
               //test for tech-free multiple choice and extended response (first of these is always beginning of chapter)
 
               if (pdf[line].includes("Exercise") || pdf[line].includes("Multiple-choice") || pdf[line].includes("Technology-free") || pdf[line].includes("Extended-response")) {
-                    console.log(pdf[line]);
                     isQns = true;
+                    pageNumbers.push(pageNumber);
                     if (first) {
                           first = false;
                     } else {
+
                           exercises.push(exerciseContent);
                     }
                     exerciseContent = [];
@@ -195,12 +220,15 @@ var cambridge = { //in object so that other textbooks can eventually be added in
               }
         }
         exercises.push(exerciseContent);
-        console.log(exercises);
-        newPDF.push(exercises)
-        return newPDF;
+        newPDF.push(exercises);
+        var returnData = {
+              exercises : newPDF,
+              pageNumbers : pageNumbers
+        }
+        return returnData;
       },
 
-      formatSolutions : function(pdf) {
+      formatSolutions : function(pdf, pageNumberDefault) {
             var qnsData = this.getQnsNums(pdf);
 
             qnsData = this.filterUnreasonableNums(pdf, qnsData);
@@ -220,10 +248,12 @@ var cambridge = { //in object so that other textbooks can eventually be added in
             //estimates line heights to display from pdf
             qnsData = this.getLineHeights(pdf, qnsData);
 
+            qnsData = this.getPageNumbers(pdf, qnsData, pageNumberDefault);
+
             return qnsData;
       },
 
-      formatQuestions : function(pdf) {
+      formatQuestions : function(pdf, pageNumberDefault) {
             //filtering question numbers
             var qnsData = this.getQnsNums(pdf);
             qnsData = this.outliersQnsNums(pdf, qnsData);
@@ -238,12 +268,35 @@ var cambridge = { //in object so that other textbooks can eventually be added in
             //estimates line heights to display from PDF
             qnsData = this.getLineHeights(pdf, qnsData);
 
+            qnsData = this.getPageNumbers(pdf, qnsData, pageNumberDefault);
+
             return qnsData;
+      },
+
+      getPageNumbers : function(pdf, qnsData, pageNumberDefault) {
+              var pageNums = [];
+              var qnsCounter = 0;
+              var pageNumber = pageNumberDefault;
+
+              for (var i=0; i < pdf.length; i++) {
+                    if (pdf[i].includes(this.exception.catchTarget)) {
+                            pageNumber++;
+                    }
+                    if (qnsCounter >= qnsData.length) {
+                          return qnsData;
+                    }
+                    if (i == qnsData[qnsCounter].lineNumber) {
+                            i--; //ensures that inline questions are found
+                            qnsData[qnsCounter].pageNumber = pageNumber;
+                            qnsCounter++;
+                    }
+              }
+              return qnsData;
       },
 
       getLineHeights : function(pdf, qnsData) {
               for (var i=0; i < qnsData.length; i++) {
-                      if (i+1 != qnsData.length && Math.abs(qnsData[i+1].lineNumber - qnsData[i].lineEnd) <= 1) { //height is likely accurate
+                      if (i+1 != qnsData.length && Math.abs(qnsData[i+1].lineNumber - qnsData[i].lineEnd) <= 2) { //height is likely accurate
                             qnsData[i].height = qnsData[i].lineEnd - qnsData[i].lineNumber + 1;
                             if (qnsData[i].lineNumber == 0) {
                                   qnsData[i].height--; //lineNumber is set to 0 for first question instead of 1
@@ -253,8 +306,9 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                             }
                       } else if (i+1 != qnsData.length) {
                               qnsData[i].height = qnsData[i+1].lineEnd - qnsData[i].lineEnd;
+                      } else { //last data
+                            qnsData[i].height = 0;
                       }
-
               }
               return qnsData;
       },
@@ -352,12 +406,10 @@ var cambridge = { //in object so that other textbooks can eventually be added in
       addMissingQuestionToData : function(prevQns, qnsData, newQuestion) {
                 var returnData = [];
                 for (var i=0; i < qnsData.length; i++) {
-
                         if (qnsData[i].questionNumber > newQuestion.questionNumber) {
                                 returnData.push(newQuestion);
                         }
                         returnData.push(qnsData[i]);
-
                 }
                 return returnData;
       },
@@ -562,7 +614,10 @@ var cambridge = { //in object so that other textbooks can eventually be added in
           return returnData;
       },
 
-      getAllTextbookSolutions : function(pdf) {
+      getAllTextbookSolutions : function(formattedPDF) {
+            var pdf = formattedPDF.pdfData;
+            var pageNumbers = formattedPDF.pageNumbers;
+
             var answerObj = {
                   chapter : "Answers",
                   chapters : []
@@ -577,7 +632,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                             name : pdf[i][j][0],
                             questions : []
                       }
-                      exerciseObj.questions = this.formatSolutions(pdf[i][j]);
+                      exerciseObj.questions = this.formatSolutions(pdf[i][j], pageNumbers[i][j]);
                       chapterObj.exercises.push(exerciseObj);
                 }
                 answerObj.chapters.push(chapterObj);
@@ -586,7 +641,10 @@ var cambridge = { //in object so that other textbooks can eventually be added in
 
       },
 
-      getAllChapterQuestions : function(pdf, rawPDF) {
+      getAllChapterQuestions : function(formattedPDF, rawPDF) {
+            var pdf = formattedPDF.exercises;
+            var pageNumbers = formattedPDF.pageNumbers;
+
             var chapterObj = {
                   chapter : rawPDF[0],
                   exercises: []
@@ -597,7 +655,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                             name : pdf[i][j][0],
                             questions : []
                       }
-                      exerciseObj.questions = this.formatQuestions(pdf[i][j]);
+                      exerciseObj.questions = this.formatQuestions(pdf[i][j], pageNumbers[j]);
                       chapterObj.exercises.push(exerciseObj);
                 }
             }
@@ -614,31 +672,40 @@ var cambridge = { //in object so that other textbooks can eventually be added in
             }
 
             for (var i=0; i < this.pdfs[textbookName].length; i++) {
-                  if (this.pdfs[textbookName][i].chapter.substring(0, chapter.length) == chapter) {
+                  if (this.pdfs[textbookName][i].chapter.includes(chapter)) {
                         myChapter = this.pdfs[textbookName][i].chapter;
-                        var chIndex = i;
                         break;
                   }
             }
+
             if (myChapter === undefined) {
                   console.log("Error could not located chapter.");
                   return;
             }
-            for (var i=0; i < this.pdfs[textbookName][chIndex].exercises.length; i++) {
-                  if (this.pdfs[textbookName][chIndex].exercises[i].name.substring(0, exercise.length) == exercise) {
-                        var exIndex = i;
-                        myExercise = this.pdfs[textbookName][chIndex].exercises[i].name;
-                        var questions = this.pdfs[textbookName][chIndex].exercises[i].questions;
-                        break;
-                  }
+
+            for (var j=0; j < this.pdfs[textbookName].length; j++) {
+                    if (this.pdfs[textbookName][j].chapter.includes(chapter)) {
+                          var chIndex = parseInt(chapter)-1;
+                          for (var i=0; i < this.pdfs[textbookName][j].exercises.length; i++) {
+                                if (this.pdfs[textbookName][j].exercises[i].name.includes(exercise)) {
+                                      var exIndex = i;
+                                      myExercise = this.pdfs[textbookName][j].exercises[i].name;
+
+                                      var questions = this.pdfs[textbookName][j].exercises[i].questions;
+                                      break;
+                                }
+                          }
+                          break;
+                    }
             }
+
             if (myExercise === undefined) {
                   console.log("Error could not located exercise.");
                   return;
             }
             for (var i=0; i < this.pdfs[textbookName].length; i++) {
                   if (this.pdfs[textbookName][i].chapter.substring(0, 7) == "Answers") {
-                        solutions = this.pdfs[textbookName][i].chapters[chIndex-1].exercises[exIndex].questions;
+                        solutions = this.pdfs[textbookName][i].chapters[chIndex].exercises[exIndex].questions;
                         break;
                   }
             }
