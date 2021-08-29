@@ -88,8 +88,14 @@ input[type="file"] {
 }
 
 .settings-container {
-    width: 25%;
+    width: 75%;
+    display: flex;
+}
 
+.settings-container h1 {
+      padding: 20px;
+      margin-right: 20px;
+      text-decoration: underline;
 }
 
 .subject {

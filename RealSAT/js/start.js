@@ -4,6 +4,8 @@ function startUp(data) { //triggers once data is fetched, otherwise webpage woul
         console.log(data);
         mySubjects = data.subjects;
 
+
+
         addSubjectMethods(data.subjects)
 
         if (data.subjects.length > 0) {
@@ -35,8 +37,13 @@ function startUp(data) { //triggers once data is fetched, otherwise webpage woul
               cambridge.pdfs = data.pdfs[0];
         }
 
-        updateColumnWithSubject(); //fills side column with the next subject you have or your current subject
+        if(localStorage.getItem("uploadedFile") == "none" || localStorage.getItem("uploadedFile") == null) {
+                updateColumnWithSubject(); //fills side column with the next subject you have or your current subject
+        } else {
 
+                updateSubjectColumn(localStorage.getItem("uploadedFile"), true)
+        }
+        localStorage.setItem("uploadedFile", "none");
 }
 
 function updateColumnWithSubject() {

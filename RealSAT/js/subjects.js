@@ -15,9 +15,14 @@ var allSubjects = [
     new Subject("Specialist Math", "#F1796C"),
     new Subject("Physics", "#EBD070"),
     new Subject("Chemistry", "#EBD070"),
+    new Subject("Biology", "#EBD070"),
     new Subject("English", "#3C64B1"),
+    new Subject("English Language", "#3C64B1"),
+    new Subject("Literature", "#3C64B1"),
     new Subject("Math Methods", "#F1796C"),
+    new Subject("Further Maths", "#F1796C"),
     new Subject("Software Development", "#8DDDBE"),
+    new Subject("Accounting", "#8DDDBE"),
 ];
 
 var allowedSubjects = []; //array of subject names to test against for data validation

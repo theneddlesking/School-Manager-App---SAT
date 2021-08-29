@@ -124,7 +124,7 @@ function replaceColumnWithItem(itemType, itemIndex) { //could be cleaner with pr
 
         if (itemData.isPDFWork) {
                 var startWorkBtn = document.createElement("button");
-                startWorkBtn.textContent = "Start";
+                startWorkBtn.textContent = "Start Questions";
                 startWorkBtn.onclick = function() {
                         currentSubjectData = itemData.subject;
                         console.log(currentSubjectData)

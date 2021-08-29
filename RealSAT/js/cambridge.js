@@ -21,7 +21,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
               var textbookName = currentSubjectData.name;
 
               cambridge.rawPDFs.push(cambridge.formatTextbook(pdf, textbookName));
-
+              localStorage.setItem("uploadedFile", currentSubjectData.name);
               updatePDFData(cambridge.pdfs);
 
           };

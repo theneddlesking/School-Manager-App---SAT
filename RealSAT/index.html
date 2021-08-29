@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>IMAGINE HAVING A NAME FOR YOUR PROJECT</title>
+    <title>Homework Helper</title>
 
     <link rel="stylesheet" href="./css/master.css">
     <link rel="stylesheet" href="./css/main.css">
@@ -17,7 +17,6 @@
                 <p id="chapter-box-name">Exercise Name</p>
           </div>
     </template>
-
 
     <template id="temp-exercise-box">
           <div class="exercise-box" onclick="selectExercise(this)">
@@ -147,8 +146,10 @@
                       <p class="subject-name clickable">Subject Not Loaded</p>
                   </div>
               </div>
-              <h1></h1>
+
+
               <div class="settings-container container">
+                <h1>Homework Helper</h1>
                     <img src="./images/settings.png" alt="" id="settings-IMG" onclick="openSettings()" class="clickable">
               </div>
         </div>
@@ -257,17 +258,17 @@
                 <div class="large-button white-button" onclick="loadPage('main')">
                       <p >Back < </p>
                 </div>
-                <h3>Exercise 16B - Subject Name</h3>
+                <h3 id="exercise-name">Exercise 16B - Subject Name</h3>
           </div>
           <div class="progress">
                 <div class="progress-bar">
-                      <div class="progress-filled">
+                      <div class="progress-filled" id="progress-filled">
 
                       </div>
                 </div>
           </div>
           <div class="questions-container">
-                <div class="prev-question large-button white-button" onclick="changeQuestion(-1)">
+                <div class="prev-question large-button white-button unselectable" onclick="changeQuestion(-1)">
                       <p> < </p>
                 </div>
 
@@ -278,16 +279,16 @@
                     </div>
                 </div>
                 <div class="question-buttons">
-                      <div class="question-button skip-button clickable" onclick="changeQuestion(1)">
+                      <div class="question-button skip-button clickable unselectable" onclick="changeQuestion(1)">
                             <p>SKIP</p>
                       </div>
-                      <div class="question-button done-button clickable" onclick="completedQuestion()">
+                      <div class="question-button done-button clickable unselectable" onclick="completedQuestion()">
                             <p>DONE</p>
                       </div>
-                      <div class="question-button save-button clickable" onclick="addQuestionsToHomework()">
+                      <div class="question-button save-button clickable unselectable" onclick="addQuestionsToHomework()">
                             <p>SAVE</p>
                       </div>
-                      <div class="question-button answer-button clickable" onclick="toggleAnswer()">
+                      <div class="question-button answer-button clickable unselectable" onclick="toggleAnswer()">
                             <p>ANSWER</p>
                       </div>
                 </div>
