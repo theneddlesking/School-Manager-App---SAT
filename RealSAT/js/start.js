@@ -1,9 +1,8 @@
-//MANAGES START UP ON THE PROGRAM
+//MANAGES START UP OF THE PROGRAM
 
 function startUp(data) { //triggers once data is fetched, otherwise webpage would have no data
         console.log(data);
         mySubjects = data.subjects;
-
 
 
         addSubjectMethods(data.subjects)

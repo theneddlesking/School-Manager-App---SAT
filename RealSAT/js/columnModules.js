@@ -1,6 +1,6 @@
 var recognisedColumnModules = [];
 
-class ColumnModule {
+class ColumnModule { //template elements that appear in the columns
       constructor(name, onload, template, bottom) {
             this.name = name;
             this.onload = onload;
@@ -79,7 +79,7 @@ function exerciseSelect(chapterElem) {
         currentSubjectData.chapter = parseInt(chapterElem.textContent);
         Debugger.log("Select exercise");
 
-        var selectOptions = getAvailableExercises(); //replace with actual later
+        var selectOptions = getAvailableExercises(); //fetches data
         console.log(selectOptions);
 
         var container = document.getElementById("exercise-container");

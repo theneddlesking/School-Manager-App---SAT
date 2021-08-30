@@ -32,7 +32,7 @@ function queryObjectStore(objectStore) { //creates promise for query
     });
 }
 
-async function retrieveData(fnCallback) {
+async function retrieveData(fnCallback) { //retreives all data from all object stores
     const db = await openDb('client_db');
     const transaction = db.transaction(["subjects_os"]);
     const objectStore = transaction.objectStore('subjects_os');
@@ -40,6 +40,8 @@ async function retrieveData(fnCallback) {
     var data = {};
 
     //queries to fetch data - probably a better way to do this without nesting
+
+    //gets data from all object stores
     queryObjectStore(objectStore).then(
             function(subjectData) {
                   data.subjects = subjectData;
@@ -70,6 +72,7 @@ async function retrieveData(fnCallback) {
 }
 
 function updatePDFData(data) {
+      //clear so there is no duplicate data
       var transaction = db.transaction(['pdf_os'], 'readwrite');
       var objectStore = transaction.objectStore('pdf_os');
       var request = objectStore.clear();
@@ -96,6 +99,7 @@ function updateNoteData(deleteIt) { //add and update
             return;
       }
 
+      //clear so there is no duplicate data
       var transaction = db.transaction(['notes_os'], 'readwrite');
       var objectStore = transaction.objectStore('notes_os');
       var request = objectStore.clear();
@@ -128,8 +132,9 @@ function updateHomeworkData(deleteIt, pdfHomework) { //add and update
       var data = {...homeworkData}; //spread operator makes shallow copy so that current data isn't overwritten
       if (!validation && !pdfHomework) {
             return;
-      } 
+      }
 
+      //clear so there is no duplicate data
       var transaction = db.transaction(['homework_os'], 'readwrite');
       var objectStore = transaction.objectStore('homework_os');
       var request = objectStore.clear();
@@ -173,6 +178,7 @@ function updateSubjectData() { //add and update
             return;
     }
 
+    //clear so there is no duplicate data
     var transaction = db.transaction(['subjects_os'], 'readwrite');
     var objectStore = transaction.objectStore('subjects_os');
     var request = objectStore.clear();

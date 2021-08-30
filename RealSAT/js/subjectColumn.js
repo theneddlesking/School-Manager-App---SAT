@@ -22,11 +22,6 @@ function updateSubjectColumn(subjectID, isSubject) {
               return;
         }
 
-        //validate data
-
-
-        //
-
         //DISPLAYING THE DATA
         document.getElementById("subject-column-dot").style.display = "inline";
         document.getElementById("subject-column-dot").style.backgroundColor = subjectData.colour;

@@ -9,11 +9,9 @@ var currentSubjectData;
 
 var homework = [];
 var notes = [];
-
-
 var mySubjects = [];
 
-function addModuleToSubject(moduleName) {
+function addModuleToSubject(moduleName) { //accepts a single module
         for (var i=0; i < baseColumnModules.length; i++) {
                 if (moduleName == baseColumnModules[i].name) {
                       return baseColumnModules[i];
@@ -22,7 +20,7 @@ function addModuleToSubject(moduleName) {
         return "No module found.";
 }
 
-function addModulesToSubject(subject, modules) {
+function addModulesToSubject(subject, modules) { //accepts array of modules
         for (var i=0; i < modules.length; i++) {
                 var result = addModuleToSubject(modules[i]);
                 if (result != "No module found.") {
@@ -32,7 +30,7 @@ function addModulesToSubject(subject, modules) {
 }
 
 
-var periods = [
+var periods = [ //time of periods
    {
      start : 9*60,
      finish : 10*60 + 15,
@@ -76,7 +74,7 @@ function getSubjectRightNow(today, getPeriod) { //if getPeriod then return the p
                         return currentClass;
                   }
               }
-              if (currentClass == "") {
+              if (currentClass == "") { //otherwise you are on break;
                   return "On Break";
               }
         }
@@ -120,7 +118,7 @@ function getNextClass(today) {
         }
         return week[day][0];
     }
-    else if (currentClass == "On Break") {
+    else if (currentClass == "On Break") { //day-1 is current day, day is tomorrow
         nextPeriod = getNextPeriod(today);
         if (nextPeriod == 0) {
             return week[day][0];
@@ -186,7 +184,7 @@ function unhighlightPeriod(period) {
 function highlightCurrentPeriod(today) {
     unhighlightPeriod("all");
     var currentPeriod = getSubjectRightNow(today, false);
-    if (currentPeriod == "Weekend" || currentPeriod == "After School") {
+    if (currentPeriod == "Weekend" || currentPeriod == "After School") { //only highlight period if you have class (don't highlight empty)
         return;
     }
     else if (currentPeriod == "Before School") {
@@ -204,7 +202,7 @@ function highlightCurrentPeriod(today) {
     }
 }
 
-function receiveTimetableData() {
+function receiveTimetableData() { //viewbank timetable
       subjects = [].concat(mySubjects);
       week = [
          [subjects[0].name, subjects[1].name, subjects[2].name, subjects[3].name],
@@ -218,7 +216,7 @@ function receiveTimetableData() {
 }
 
 
-function changeDay(num) {
+function changeDay(num) { //num signifies direction - 1 is next day, -1 is previous day
       currentDay.setDate(currentDay.getDate()+num);
       getSchedule(currentDay);
 }

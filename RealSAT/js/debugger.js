@@ -1,3 +1,5 @@
+//togglable console.log
+
 var Debugger = {
         on : false,
 
@@ -12,4 +14,4 @@ var Debugger = {
         }
 }
 
-Debugger.on = true;
+Debugger.on = false;

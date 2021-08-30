@@ -1,3 +1,5 @@
+//ORAGNISES PDF DATA
+
 var cambridge = { //in object so that other textbooks can eventually be added in furture versions
       rawPDFs : [],
 
@@ -28,7 +30,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
           reader.readAsText(file);
       },
 
-      formatTextbook : function(pdf, textbookName) {
+      formatTextbook : function(pdf, textbookName) { //removes dead space and interruptive data
             var formattedPDF = [];
             if (cambridge.pdfs[textbookName] === undefined) {
                  cambridge.pdfs[textbookName] = [];
@@ -57,7 +59,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
             return formattedPDF;
       },
 
-      formatAnswersPDF : function(pdf) {
+      formatAnswersPDF : function(pdf) { //formats lines into their chapters and exercises
           var newPDF = [];
           var exercises = [];
           var exerciseContent = [];
@@ -160,7 +162,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
           return returnData;
       },
 
-      formatChapterPDF : function(pdf) {
+      formatChapterPDF : function(pdf) { //formats lines into their chapters and exercises
         var newPDF = [];
         var exercises = [];
         var exerciseContent = [];
@@ -173,7 +175,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
         var pageNumbers = [];
         for (var line = 0; line < pdf.length; line++) {
               // catchCount--;
-              if (pdf[line].includes(this.exception.catchTarget)) {
+              if (pdf[line].includes(this.exception.catchTarget)) { //extra data at bottom of page for counting pages
                     catchCount = this.exception.catchLength;
                     pageNumber++;
               }
@@ -192,7 +194,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
               if (pdf[line].includes("Exercise") || pdf[line].includes("Multiple-choice") || pdf[line].includes("Technology-free") || pdf[line].includes("Extended-response")) {
                     isQns = true;
                     pageNumbers.push(pageNumber);
-                    if (first) {
+                    if (first) { //counts content before exercise - we want content after exercise
                           first = false;
                     } else {
 
@@ -210,7 +212,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                             whileBreak = false; //index overflow
                         }
                   }
-                  linePush = pdf[line].substring(index, pdf[line].length);
+                  linePush = pdf[line].substring(index, pdf[line].length);  //remove dead space
               }
               linePush = linePush.replace("Skillsheet", "");
 
@@ -220,7 +222,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                   }
               }
         }
-        exercises.push(exerciseContent);
+        exercises.push(exerciseContent); //add exercisess
         newPDF.push(exercises);
         var returnData = {
               exercises : newPDF,
@@ -229,7 +231,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
         return returnData;
       },
 
-      formatSolutions : function(pdf, pageNumberDefault) {
+      formatSolutions : function(pdf, pageNumberDefault) {  //format chapters and exercises into questions
             var qnsData = this.getQnsNums(pdf);
 
             qnsData = this.filterUnreasonableNums(pdf, qnsData);
@@ -254,7 +256,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
             return qnsData;
       },
 
-      formatQuestions : function(pdf, pageNumberDefault) {
+      formatQuestions : function(pdf, pageNumberDefault) { //format chapters and exercises into questions
             //filtering question numbers
             var qnsData = this.getQnsNums(pdf);
             qnsData = this.outliersQnsNums(pdf, qnsData);
@@ -274,13 +276,13 @@ var cambridge = { //in object so that other textbooks can eventually be added in
             return qnsData;
       },
 
-      getPageNumbers : function(pdf, qnsData, pageNumberDefault) {
+      getPageNumbers : function(pdf, qnsData, pageNumberDefault) { //get page numnber of each question
               var pageNums = [];
               var qnsCounter = 0;
-              var pageNumber = pageNumberDefault;
+              var pageNumber = pageNumberDefault; //page of beginning of exercise
 
               for (var i=0; i < pdf.length; i++) {
-                    if (pdf[i].includes(this.exception.catchTarget)) {
+                    if (pdf[i].includes(this.exception.catchTarget)) { //adding new page
                             pageNumber++;
                     }
                     if (qnsCounter >= qnsData.length) {
@@ -295,7 +297,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
               return qnsData;
       },
 
-      getLineHeights : function(pdf, qnsData) {
+      getLineHeights : function(pdf, qnsData) { //get height of question based on number of lines
               for (var i=0; i < qnsData.length; i++) {
                       if (i+1 != qnsData.length && Math.abs(qnsData[i+1].lineNumber - qnsData[i].lineEnd) <= 2) { //height is likely accurate
                             qnsData[i].height = qnsData[i].lineEnd - qnsData[i].lineNumber + 1;
@@ -322,20 +324,20 @@ var cambridge = { //in object so that other textbooks can eventually be added in
             return true; //test passed
       },
 
-      containsPotentialQnsLetter : function(pdf, line, letter, lineNum) {
+      containsPotentialQnsLetter : function(pdf, line, letter, lineNum) { //checks if a line could be a question part
             if (line.includes(" "+letter+" ")) {
                   return true;
             }
-            if (line[0] == letter && line[1] == " " && line.length > 2 && line[2] != "=" && line[2] != "≈") { //could add other tests if needed
+            if (line[0] == letter && line[1] == " " && line.length > 2 && line[2] != "=" && line[2] != "≈") { //equals
                   return true;
             }
-            if (line[line.length-2] == letter && (lineNum == pdf.length-1 || this.simpleEqCheck(pdf[lineNum+1]))) {
+            if (line[line.length-2] == letter && (lineNum == pdf.length-1 || this.simpleEqCheck(pdf[lineNum+1]))) { //is a equation
                   return true;
             }
             return false;
       },
 
-      getQnsNums : function(pdf) {
+      getQnsNums : function(pdf) { //get all lines that could be questions regardless of reasonableness
             var qnsData = [];
             for (var i=1; i < pdf.length; i++) {
                   var line = pdf[i];
@@ -375,7 +377,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
               return returnData;
       },
 
-      formatQnsNums : function(pdf, qnsData) {
+      formatQnsNums : function(pdf, qnsData) { //organises lines that may be questions
           var returnData = [];
 
           var expected = 1;
@@ -404,7 +406,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
           return returnData;
       },
 
-      addMissingQuestionToData : function(prevQns, qnsData, newQuestion) {
+      addMissingQuestionToData : function(prevQns, qnsData, newQuestion) { //attempts to find questions that were skipped over accidentally
                 var returnData = [];
                 for (var i=0; i < qnsData.length; i++) {
                         if (qnsData[i].questionNumber > newQuestion.questionNumber) {
@@ -685,7 +687,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                   return;
             }
 
-            for (var i=0; i < this.pdfs[textbookName].length; i++) {
+            for (var i=0; i < this.pdfs[textbookName].length; i++) { //find chapter
                   if (this.pdfs[textbookName][i].chapter.includes(chapter)) {
                         myChapter = this.pdfs[textbookName][i].chapter;
                         break;
@@ -697,7 +699,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                   return;
             }
 
-            for (var j=0; j < this.pdfs[textbookName].length; j++) {
+            for (var j=0; j < this.pdfs[textbookName].length; j++) { //find exercise
                     if (this.pdfs[textbookName][j].chapter == chapter) {
                           var chIndex = parseInt(chapter.substring(8, chapter.length))-1;
                           for (var i=0; i < this.pdfs[textbookName][j].exercises.length; i++) {

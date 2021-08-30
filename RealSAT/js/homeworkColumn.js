@@ -22,7 +22,7 @@ class HomeworkTask {
       }
 }
 
-function initialiseHomeworkData(data) {
+function initialiseHomeworkData(data) { //sets up unserialisable data
         var homeworkData = {
               homework : [],
 
@@ -64,8 +64,7 @@ function initialiseHomeworkData(data) {
 
                     for (var i=0; i < this.homeworkBySubject[task.subject.name].length; i++) {
                             if (this.homeworkBySubject[task.subject.name][i] == task) {
-
-                                    this.homeworkBySubject[task.subject.name].splice(i, 1);
+                                    this.homeworkBySubject[task.subject.name].splice(i, 1); 
                             }
                     }
 
@@ -145,7 +144,7 @@ function replaceColumnWithHomework() {
                 homeworkElem.querySelector(".dot").style.display = "block";
                 homeworkElem.querySelector(".dot").style.backgroundColor = homework.subject.colour;
 
-                
+
 
                 homeworkColumn.appendChild(homeworkElem);
         }
