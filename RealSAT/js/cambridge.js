@@ -485,7 +485,6 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                       }
               }
 
-
               if (empties < 5 && empties > 0) { //if there are few empty cells then its likely it simply missed a few questions
 
                     var questionsToFind = []; //stores questions to find with its previous and next question as guidance for where to look
@@ -497,7 +496,7 @@ var cambridge = { //in object so that other textbooks can eventually be added in
                                         qnsNumber : i,
                                         prevQns : prevQns,
                                         nextQns : undefined
-                                  }
+                                  }   
                                   questionsToFind.push(question);
                             } else {
                                   prevQns = allQnsNumbers[i];
